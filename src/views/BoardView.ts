@@ -3,7 +3,8 @@ import { Container, Point, Rectangle, Sprite } from 'pixi.js';
 import { Images } from '../assets';
 import { GameModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
-import { drawBounds, lp, makeSprite } from '../utils';
+import { lp, makeSprite } from '../utils';
+import { MatchThreeBoard } from './MatchThreeBoard';
 import { Pirate } from './Pirate';
 
 const BOUNDS = {
@@ -38,8 +39,9 @@ export class BoardView extends Container {
     private build(): void {
         this.buildBkg();
         this.buildPirate();
+        this.buildMatch3();
 
-        drawBounds(this);
+        // drawBounds(this);
     }
 
     private buildBkg(): void {
@@ -51,6 +53,12 @@ export class BoardView extends Container {
         const pirate = new Pirate();
         pirate.position.set(0, 0);
         this.addChild(pirate);
+    }
+
+    private buildMatch3(): void {
+        const board = new MatchThreeBoard('small');
+        board.position.set(0, 0);
+        this.addChild(board);
     }
 
     private onGameStateUpdate(state: GameState): void {
