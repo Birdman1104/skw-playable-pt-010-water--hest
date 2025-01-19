@@ -4,6 +4,7 @@ import { Images } from '../assets';
 import { GameModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
 import { drawBounds, lp, makeSprite } from '../utils';
+import { Pirate } from './Pirate';
 
 const BOUNDS = {
     L: { x: -750, y: -100, w: 1500, h: 850 },
@@ -36,6 +37,7 @@ export class BoardView extends Container {
 
     private build(): void {
         this.buildBkg();
+        this.buildPirate();
 
         drawBounds(this);
     }
@@ -43,6 +45,12 @@ export class BoardView extends Container {
     private buildBkg(): void {
         this.bkg = makeSprite({ texture: Images['game/bkg'], scale: new Point(1.5, 1.5) });
         this.addChild(this.bkg);
+    }
+
+    private buildPirate(): void {
+        const pirate = new Pirate();
+        pirate.position.set(0, 0);
+        this.addChild(pirate);
     }
 
     private onGameStateUpdate(state: GameState): void {
