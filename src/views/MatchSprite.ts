@@ -1,16 +1,34 @@
+import anime from 'animejs';
 import { Container, Sprite } from 'pixi.js';
 import { Images } from '../assets';
-import { makeSprite } from '../utils';
+import { callIfExists, makeSprite } from '../utils';
 
 export class MatchSprite extends Container {
     public originalPosition: { x: number; y: number };
     public boardPosition: { row: number; col: number };
     private sprite: Sprite;
 
-    constructor(private type: string) {
+    constructor(private _type: string) {
         super();
 
         this.build();
+    }
+
+    public get type(): string {
+        return this._type;
+    }
+
+    public explode(cb?): void {
+        anime({
+            targets: this.sprite.scale,
+            x: 0,
+            y: 0,
+            duration: 200,
+            easing: 'easeInOutSine',
+            complete: () => {
+                callIfExists(cb);
+            },
+        });
     }
 
     private build(): void {

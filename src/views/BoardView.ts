@@ -56,9 +56,23 @@ export class BoardView extends Container {
     }
 
     private buildMatch3(): void {
-        const board = new MatchThreeBoard('small');
-        board.position.set(0, 0);
-        this.addChild(board);
+        const pos = [
+            { x: -350, y: 100 },
+            { x: 250, y: -100 },
+            { x: 250, y: 450 },
+        ];
+
+        const type = ['large', 'small', 'small'];
+        for (let i = 0; i < 3; i++) {
+            const board = new MatchThreeBoard(type[i] as 'large' | 'small', i);
+            board.position.set(pos[i].x, pos[i].y);
+            this.addChild(board);
+            // board.scale.set(0.75);
+
+            board.on('won', () => {
+                board.hide();
+            });
+        }
     }
 
     private onGameStateUpdate(state: GameState): void {
