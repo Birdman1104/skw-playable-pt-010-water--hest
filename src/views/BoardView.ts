@@ -57,9 +57,9 @@ export class BoardView extends Container {
 
     private buildMatch3(): void {
         const pos = [
-            { x: -350, y: 100 },
-            { x: 250, y: -100 },
-            { x: 250, y: 450 },
+            { x: -400, y: 300 },
+            { x: 50, y: 300 },
+            { x: 450, y: 300 },
         ];
 
         const type = ['large', 'small', 'small'];
@@ -67,7 +67,7 @@ export class BoardView extends Container {
             const board = new MatchThreeBoard(type[i] as 'large' | 'small', i);
             board.position.set(pos[i].x, pos[i].y);
             this.addChild(board);
-            // board.scale.set(0.75);
+            board.scale.set(0.75);
 
             board.on('won', () => {
                 board.hide();
