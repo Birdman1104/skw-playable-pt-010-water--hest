@@ -1,4 +1,6 @@
 import { Container } from 'pixi.js';
+import { delayRunnable } from '../../utils';
+import { PirateHead } from './PirateHead';
 
 const LAYERS = [
     {
@@ -18,6 +20,10 @@ export class Pirate extends Container {
     }
 
     private build(): void {
-        //
+        const head = new PirateHead();
+        head.idle();
+
+        delayRunnable(1, () => head.sad());
+        this.addChild(head);
     }
 }

@@ -5,7 +5,7 @@ import { GameModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
 import { lp, makeSprite } from '../utils';
 import { MatchThreeBoard } from './MatchThreeBoard';
-import { Pirate } from './Pirate';
+import { Pirate } from './pirate/Pirate';
 
 const BOUNDS = {
     L: { x: -750, y: -100, w: 1500, h: 850 },
@@ -39,7 +39,7 @@ export class BoardView extends Container {
     private build(): void {
         this.buildBkg();
         this.buildPirate();
-        this.buildMatch3();
+        // this.buildMatch3();
 
         // drawBounds(this);
     }
