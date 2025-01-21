@@ -1,5 +1,5 @@
 import { lego } from '@armathai/lego';
-import { Container, Point, Rectangle, Sprite } from 'pixi.js';
+import { Container, Rectangle, Sprite } from 'pixi.js';
 import { Images } from '../assets';
 import { GameModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
@@ -45,7 +45,7 @@ export class BoardView extends Container {
     }
 
     private buildBkg(): void {
-        this.bkg = makeSprite({ texture: Images['game/bkg'], scale: new Point(1.5, 1.5) });
+        this.bkg = makeSprite({ texture: Images['game/bkg'], scale: { x: 1.5, y: 1.5 } });
         this.addChild(this.bkg);
     }
 

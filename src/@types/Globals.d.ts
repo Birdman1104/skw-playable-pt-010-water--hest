@@ -24,9 +24,9 @@ declare namespace GlobalMixins {
 type SpriteConfig = {
     texture: string;
     tint?: number;
-    scale?: PIXI.Point;
-    anchor?: PIXI.Point;
-    position?: PIXI.Point;
+    scale?: { x: number; y: number };
+    anchor?: { x: number; y: number };
+    position?: { x: number; y: number };
 };
 
 type CardConfig = {

@@ -163,16 +163,16 @@ export const makeSprite = (config: SpriteConfig): PIXI.Sprite => {
     const {
         texture,
         tint = 0,
-        position = new Point(0, 0),
-        scale = new Point(1, 1),
-        anchor = new Point(0.5, 0.5),
+        position = { x: 0, y: 0 },
+        scale = { x: 1, y: 1 },
+        anchor = { x: 0.5, y: 0.5 },
     } = config;
 
     const img = Sprite.from(texture);
 
-    img.scale.copyFrom(scale);
-    img.anchor.copyFrom(anchor);
-    img.position.copyFrom(position);
+    img.scale.copyFrom(new Point(scale.x, scale.y));
+    img.anchor.copyFrom(new Point(anchor.x, anchor.y));
+    img.position.copyFrom(new Point(position.x, position.y));
 
     if (tint) img.tint = tint;
 

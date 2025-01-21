@@ -54,6 +54,10 @@ export class PirateHead extends Container {
         this.showMouth(this.mouthMid, true);
     }
 
+    public openMouth(): void {
+        this.showMouth(this.mouthOpen, true);
+    }
+
     private build(): void {
         this.head = makeSprite({ texture: Images['pirate/head'] });
         this.addChild(this.head);
