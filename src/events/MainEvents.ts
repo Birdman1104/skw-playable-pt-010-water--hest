@@ -11,6 +11,11 @@ export const MainGameEvents = {
 
 export const BoardEvents = {
     FallComplete: 'BoardEventsFallComplete',
+    BubbleClick: 'BoardEventsBubbleClick',
+};
+
+export const ForegroundEvents = {
+    Match3Complete: 'BoardEventsMatch3Complete',
 };
 
 export const TakeMe = {

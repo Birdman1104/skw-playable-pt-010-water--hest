@@ -17,3 +17,7 @@ export const onBoardStateUpdateCommand = (state: BoardState) => {
             break;
     }
 };
+
+export const onBubbleClickCommand = (type: string) => {
+    Head.gameModel?.board?.bubbleClick(type);
+};

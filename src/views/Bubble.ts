@@ -9,6 +9,7 @@ export class Bubble extends Container {
     private _isOccupied: boolean = false;
     private bkg: Sprite;
     private icon: Sprite;
+    private type: string = '';
 
     constructor() {
         super();
@@ -20,14 +21,32 @@ export class Bubble extends Container {
         return this._isOccupied;
     }
 
-    public show(icon: string) {
-        this.updateIcon(icon);
+    public hide() {
+        this.bkg.interactive = true;
+        anime({
+            targets: this.scale,
+            x: 0,
+            y: 0,
+            duration: 300,
+            easing: 'easeOutBack',
+            complete: () => {
+                this.bkg.interactive = true;
+            },
+        });
+    }
+
+    public show(type: string) {
+        this.type = type;
+        this.updateIcon(type);
         anime({
             targets: this.scale,
             x: SCALE,
             y: SCALE,
             duration: 300,
             easing: 'easeOutBack',
+            complete: () => {
+                this.bkg.interactive = true;
+            },
         });
     }
 
@@ -43,6 +62,8 @@ export class Bubble extends Container {
 
     private build() {
         this.bkg = makeSprite({ texture: Images['game/bubble'], anchor: { x: 0.5, y: 0.5 } });
+        this.bkg.interactive = true;
+        this.bkg.on('pointerdown', () => this.emit('click', this.type));
         this.addChild(this.bkg);
 
         this.icon = makeSprite({ texture: Images['game/sword'], anchor: { x: 0.5, y: 0.5 } });

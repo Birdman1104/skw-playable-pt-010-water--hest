@@ -74,6 +74,10 @@ export class BoardView extends Container {
         for (let i = 0; i < 2; i++) {
             const bubble = new Bubble();
             bubble.position.set(pos[i].x, pos[i].y);
+            bubble.on('click', (type) => {
+                lego.event.emit(BoardEvents.BubbleClick, type);
+                this.bubbles.forEach((b) => b.hide());
+            });
             this.addChild(bubble);
             this.bubbles.push(bubble);
         }

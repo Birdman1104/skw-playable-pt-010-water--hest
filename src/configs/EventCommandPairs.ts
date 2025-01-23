@@ -9,7 +9,7 @@ import {
     resizeCommand,
     takeToStoreCommand,
 } from './Commands';
-import { onBoardStateUpdateCommand, onPirateFallCompleteCommand } from './GameCommands';
+import { onBoardStateUpdateCommand, onBubbleClickCommand, onPirateFallCompleteCommand } from './GameCommands';
 
 export const mapCommands = () => {
     eventCommandPairs.forEach(({ event, command }) => {
@@ -51,6 +51,10 @@ const eventCommandPairs = Object.freeze([
     {
         event: BoardEvents.FallComplete,
         command: onPirateFallCompleteCommand,
+    },
+    {
+        event: BoardEvents.BubbleClick,
+        command: onBubbleClickCommand,
     },
     {
         event: BoardModelEvents.StateUpdate,

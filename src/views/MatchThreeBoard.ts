@@ -4,49 +4,26 @@ import { Images } from '../assets';
 import { delayRunnable, makeSprite } from '../utils';
 import { MatchSprite } from './MatchSprite';
 
-const BOARD_SIZES = {
-    small: { rows: 3, cols: 2, elements: 2 }, // 3x2 board
-    large: { rows: 4, cols: 3, elements: 4 }, // 4x3 board
-};
-
-const configs = [
-    [
-        ['orange', 'pink', 'blue', 'green'],
-        ['pink', 'orange', 'blue', 'green'],
-        ['orange', 'green', 'pink', 'blue'],
-    ],
-
-    [
-        ['red', 'blue', 'red'],
-        ['blue', 'red', 'blue'],
-    ],
-    [
-        ['green', 'orange', 'green'],
-        ['orange', 'green', 'orange'],
-    ],
-];
-
-const START_POS = {
-    large: { x: -185, y: -275 },
-    small: { x: -85, y: -170 },
-};
-// const arr =;
-
-export const tileSize = {
-    large: 185,
-    small: 170,
-};
-
 export class MatchThreeBoard extends Container {
     private draggedElement: MatchSprite | null;
     private dragStartPosition: any;
     private dragStartBoardPosition: { row: number; col: number } = { row: -1, col: -1 };
-    private config: { rows: number; cols: number; elements: number };
     private data: any;
     private bkg: Sprite;
     private board: (MatchSprite | null)[][] = [];
 
-    constructor(private size: 'small' | 'large', private i: number) {
+    constructor(
+        private config: {
+            cols: number;
+            rows: number;
+            grid: string[][];
+            elements: number;
+            startX: number;
+            startY: number;
+            tileSize: number;
+            size: string;
+        },
+    ) {
         super();
 
         this.build();
@@ -63,21 +40,21 @@ export class MatchThreeBoard extends Container {
     }
 
     private build(): void {
-        this.bkg = makeSprite({ texture: Images[this.size === 'small' ? 'game/small_board' : 'game/big_board'] });
+        this.bkg = makeSprite({
+            texture: Images[this.config.size === 'small' ? 'game/small_board' : 'game/big_board'],
+        });
         this.bkg.anchor.set(0.5);
         this.addChild(this.bkg);
 
-        const { x: sx, y: sy } = START_POS[this.size];
-        const arr = configs[this.i];
-        this.config = BOARD_SIZES[this.size];
-        for (let i = 0; i < this.config.cols; i++) {
+        const { startX: sx, startY: sy, grid, rows, cols, tileSize } = this.config;
+        for (let i = 0; i < cols; i++) {
             this.board[i] = [];
-            for (let j = 0; j < this.config.rows; j++) {
-                const element = arr[i][j];
+            for (let j = 0; j < rows; j++) {
+                const element = grid[i][j];
 
                 const sprite = new MatchSprite(element);
-                sprite.x = sx + i * tileSize[this.size];
-                sprite.y = sy + j * tileSize[this.size];
+                sprite.x = sx + i * tileSize;
+                sprite.y = sy + j * tileSize;
 
                 sprite.on('down', (e) => this.onDragStart(e, sprite));
                 sprite.on('end', () => this.onDragEnd());
@@ -250,6 +227,8 @@ export class MatchThreeBoard extends Container {
                 }
 
                 delayRunnable(0.3, () => {
+                    const { startX: sx, startY: sy, tileSize, rows, cols } = this.config;
+
                     const cb = () => {
                         if (this.board.every((col) => col.every((el) => el === null))) {
                             delayRunnable(0.3, () => {
@@ -263,12 +242,12 @@ export class MatchThreeBoard extends Container {
                         element.explode(i === matches.length - 1 ? cb : null);
                     });
 
-                    for (let col = 0; col < this.config.cols; col++) {
+                    for (let col = 0; col < cols; col++) {
                         let newColumn: (MatchSprite | null)[] = this.board[col].filter((element) => element !== null);
                         while (newColumn.length < this.board[col].length) {
                             newColumn.unshift(null);
                         }
-                        for (let row = 0; row < this.config.rows; row++) {
+                        for (let row = 0; row < rows; row++) {
                             this.board[col][row] = newColumn[row];
                             if (this.board[col][row]) {
                                 // @ts-ignore
@@ -277,13 +256,11 @@ export class MatchThreeBoard extends Container {
                         }
                     }
 
-                    const { x: sx, y: sy } = START_POS[this.size];
-
                     this.board.forEach((col, i) => {
                         col.forEach((element, j) => {
                             if (element) {
-                                const x = sx + i * tileSize[this.size];
-                                const y = sy + j * tileSize[this.size];
+                                const x = sx + i * tileSize;
+                                const y = sy + j * tileSize;
 
                                 anime({
                                     targets: element,
