@@ -33,8 +33,10 @@ export const assets = {
         'pirate/mouth_open.png': require('../assets/images/pirate/mouth_open.png').default,
         'pirate/mouth_pleased.png': require('../assets/images/pirate/mouth_pleased.png').default,
         'pirate/mouth_sad.png': require('../assets/images/pirate/mouth_sad.png').default,
+        'pirate/mouth_scared.png': require('../assets/images/pirate/mouth_scared.png').default,
         'pirate/pupil.png': require('../assets/images/pirate/pupil.png').default,
         'pirate/right_hand.png': require('../assets/images/pirate/right_hand.png').default,
+        'pirate/water_layer.png': require('../assets/images/pirate/water_layer.png').default,
     },
     particles: {},
     sounds: {},
@@ -74,8 +76,10 @@ export const Images = {
     'pirate/mouth_open': 'pirate/mouth_open.png',
     'pirate/mouth_pleased': 'pirate/mouth_pleased.png',
     'pirate/mouth_sad': 'pirate/mouth_sad.png',
+    'pirate/mouth_scared': 'pirate/mouth_scared.png',
     'pirate/pupil': 'pirate/pupil.png',
     'pirate/right_hand': 'pirate/right_hand.png',
+    'pirate/water_layer': 'pirate/water_layer.png',
 };
 
 export const Sounds = {};

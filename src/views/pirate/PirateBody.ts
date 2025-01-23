@@ -17,8 +17,8 @@ const config = [
     {
         name: 'rightHand',
         texture: Images['pirate/right_hand'],
-        anchor: { x: 0.325, y: 0.5 },
-        position: { x: -95, y: 0 },
+        anchor: { x: 0.3, y: 0.49 },
+        position: { x: -101, y: -5 },
     },
 ];
 
@@ -46,6 +46,26 @@ export class PirateBody extends Container {
         anime({
             targets: this.rightHand,
             rotation: [0, -0.3],
+            duration: 300,
+            direction: 'alternate',
+            easing: 'linear',
+            loop: true,
+        });
+    }
+
+    public fall(): void {
+        this.reset();
+        anime({
+            targets: this.leftHand,
+            rotation: [-0.3, -0.1],
+            duration: 300,
+            direction: 'alternate',
+            easing: 'linear',
+            loop: true,
+        });
+        anime({
+            targets: this.rightHand,
+            rotation: [0.3, -0.1],
             duration: 300,
             direction: 'alternate',
             easing: 'linear',
@@ -85,21 +105,5 @@ export class PirateBody extends Container {
             this[c.name] = makeSprite(c);
             this.addChild(this[c.name]);
         });
-
-        // this.torso = makeSprite({ texture: Images['pirate/body'] });
-        // this.leftHand = makeSprite({
-        //     texture: Images['pirate/left_hand'],
-        //     anchor: { x: 0.66, y: 0.5 },
-        //     position: { x: 75, y: 0 },
-        // });
-        // this.rightHand = makeSprite({
-        //     texture: Images['pirate/right_hand'],
-        //     anchor: { x: 0.325, y: 0.5 },
-        //     position: { x: -95, y: 0 },
-        // });
-
-        // this.addChild(this.leftHand);
-        // this.addChild(this.torso);
-        // this.addChild(this.rightHand);
     }
 }

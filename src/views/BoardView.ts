@@ -1,8 +1,9 @@
 import { lego } from '@armathai/lego';
+import anime from 'animejs';
 import { Container, Rectangle, Sprite } from 'pixi.js';
 import { Images } from '../assets';
-import { GameModelEvents } from '../events/ModelEvents';
-import { GameState } from '../models/GameModel';
+import { BoardModelEvents } from '../events/ModelEvents';
+import { BoardState } from '../models/BoardModel';
 import { lp, makeSprite } from '../utils';
 import { MatchThreeBoard } from './MatchThreeBoard';
 import { Pirate } from './pirate/Pirate';
@@ -12,13 +13,20 @@ const BOUNDS = {
     P: { x: -425, y: -800, w: 850, h: 1600 },
 };
 
+const PIRATE = {
+    initialPos: { x: -100, y: -300 },
+    targetPos: { x: -100, y: 196 },
+    scale: 0.7,
+};
+
 export class BoardView extends Container {
     private bkg: Sprite;
+    private pirate: Pirate;
 
     constructor() {
         super();
 
-        lego.event.on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this);
+        lego.event.on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this);
 
         this.build();
     }
@@ -50,9 +58,14 @@ export class BoardView extends Container {
     }
 
     private buildPirate(): void {
-        const pirate = new Pirate();
-        pirate.position.set(0, 0);
-        this.addChild(pirate);
+        const {
+            initialPos: { x, y },
+            scale,
+        } = PIRATE;
+        this.pirate = new Pirate();
+        this.pirate.position.set(x, y);
+        this.pirate.scale.set(scale);
+        this.addChild(this.pirate);
     }
 
     private buildMatch3(): void {
@@ -75,7 +88,31 @@ export class BoardView extends Container {
         }
     }
 
-    private onGameStateUpdate(state: GameState): void {
-        //
+    private onBoardStateUpdate(state: BoardState): void {
+        console.warn('BoardView.onBoardStateUpdate', BoardState[state]);
+        switch (state) {
+            case BoardState.PirateFalls:
+                this.onPirateFalls();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private onPirateFalls(): void {
+        const { x, y } = PIRATE.targetPos;
+        this.pirate.fall();
+        anime({
+            targets: this.pirate,
+            x,
+            y,
+            easing: 'easeInSine',
+            duration: 500,
+            complete: () => {
+                this.pirate.idle();
+                this.pirate.float();
+            },
+        });
     }
 }
