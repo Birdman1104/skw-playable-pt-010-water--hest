@@ -2,6 +2,12 @@
 
 export const assets = {
     images: {
+        'bubbles/bomb.png': require('../assets/images/bubbles/bomb.png').default,
+        'bubbles/bubble.png': require('../assets/images/bubbles/bubble.png').default,
+        'bubbles/hand.png': require('../assets/images/bubbles/hand.png').default,
+        'bubbles/key.png': require('../assets/images/bubbles/key.png').default,
+        'bubbles/ship.png': require('../assets/images/bubbles/ship.png').default,
+        'bubbles/sword.png': require('../assets/images/bubbles/sword.png').default,
         'chest/0.png': require('../assets/images/chest/0.png').default,
         'chest/1.png': require('../assets/images/chest/1.png').default,
         'chest/2.png': require('../assets/images/chest/2.png').default,
@@ -20,13 +26,8 @@ export const assets = {
         'elements/red.png': require('../assets/images/elements/red.png').default,
         'game/big_board.png': require('../assets/images/game/big_board.png').default,
         'game/bkg.jpg': require('../assets/images/game/bkg.jpg').default,
-        'game/bomb.png': require('../assets/images/game/bomb.png').default,
-        'game/bubble.png': require('../assets/images/game/bubble.png').default,
-        'game/hand.png': require('../assets/images/game/hand.png').default,
         'game/key.png': require('../assets/images/game/key.png').default,
         'game/play_btn.png': require('../assets/images/game/play_btn.png').default,
-        'game/sabre.png': require('../assets/images/game/sabre.png').default,
-        'game/ship.png': require('../assets/images/game/ship.png').default,
         'game/small_board.png': require('../assets/images/game/small_board.png').default,
         'game/sound_off.png': require('../assets/images/game/sound_off.png').default,
         'game/sound_on.png': require('../assets/images/game/sound_on.png').default,
@@ -77,6 +78,12 @@ export const assets = {
 };
 
 export const Images = {
+    'bubbles/bomb': 'bubbles/bomb.png',
+    'bubbles/bubble': 'bubbles/bubble.png',
+    'bubbles/hand': 'bubbles/hand.png',
+    'bubbles/key': 'bubbles/key.png',
+    'bubbles/ship': 'bubbles/ship.png',
+    'bubbles/sword': 'bubbles/sword.png',
     'chest/0': 'chest/0.png',
     'chest/1': 'chest/1.png',
     'chest/2': 'chest/2.png',
@@ -95,13 +102,8 @@ export const Images = {
     'elements/red': 'elements/red.png',
     'game/big_board': 'game/big_board.png',
     'game/bkg': 'game/bkg.jpg',
-    'game/bomb': 'game/bomb.png',
-    'game/bubble': 'game/bubble.png',
-    'game/hand': 'game/hand.png',
     'game/key': 'game/key.png',
     'game/play_btn': 'game/play_btn.png',
-    'game/sabre': 'game/sabre.png',
-    'game/ship': 'game/ship.png',
     'game/small_board': 'game/small_board.png',
     'game/sound_off': 'game/sound_off.png',
     'game/sound_on': 'game/sound_on.png',

@@ -25,7 +25,7 @@ export class BoardModel extends ObservableModel {
 
     private _match3: Match3Model | null;
 
-    private currentBubbleIndex = 0;
+    private _chosenBubble: BubbleType = BubbleType.Ship;
 
     constructor() {
         super('BoardModel');
@@ -65,6 +65,14 @@ export class BoardModel extends ObservableModel {
         this._match3 = value;
     }
 
+    public get chosenBubble(): BubbleType {
+        return this._chosenBubble;
+    }
+
+    public set chosenBubble(value: BubbleType) {
+        this._chosenBubble = value;
+    }
+
     public setState(value: BoardState): void {
         this._state = value;
     }
@@ -81,9 +89,8 @@ export class BoardModel extends ObservableModel {
     }
 
     public bubbleClick(type: string): void {
+        this.chosenBubble = type as BubbleType;
         BUBBLES_ORDER.splice(BUBBLES_ORDER.indexOf(type as BubbleType), 1);
-
-        console.warn(BUBBLES_ORDER);
 
         this.bubble1 = null;
         this.bubble2 = null;
@@ -93,10 +100,7 @@ export class BoardModel extends ObservableModel {
     }
 
     public match3Complete(): void {
-        console.warn('BoardModel.match3Complete');
-
         this._match3 = null;
-
         this.initBubbles();
     }
 }

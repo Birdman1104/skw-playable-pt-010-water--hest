@@ -1,5 +1,5 @@
 import { lego } from '@armathai/lego';
-import { BoardEvents, ForegroundEvents, MainGameEvents, SoundEvents, TakeMe } from '../events/MainEvents';
+import { BoardEvents, MainGameEvents, SoundEvents, TakeMe } from '../events/MainEvents';
 import { AdModelEvents, BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
 import {
     onAdStatusUpdateCommand,
@@ -66,7 +66,7 @@ const eventCommandPairs = Object.freeze([
         command: onBoardStateUpdateCommand,
     },
     {
-        event: ForegroundEvents.Match3Complete,
+        event: BoardEvents.AnimationComplete,
         command: onMatch3CompleteCommand,
     },
 ]);

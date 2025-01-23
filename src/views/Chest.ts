@@ -50,7 +50,9 @@ export class Chest extends Container {
     }
 
     public dropAlgae(): void {
-        this.algae.forEach((algae) => {
+        if (this.algae.length === 0) return;
+
+        this.algae.forEach((algae, i) => {
             const angle = Math.random() * 50 - 25;
             console.warn(angle);
 
@@ -63,6 +65,9 @@ export class Chest extends Container {
                 easing: 'easeOutQuad',
                 complete: () => {
                     algae.destroy();
+                    if (i === this.algae.length - 1) {
+                        this.algae = [];
+                    }
                 },
             });
         });

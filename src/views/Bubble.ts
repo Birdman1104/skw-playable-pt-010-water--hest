@@ -53,7 +53,8 @@ export class Bubble extends Container {
     }
 
     public updateIcon(icon: string) {
-        this.icon.texture = Texture.from(Images[`game/${icon}`]);
+        this.icon.texture = Texture.from(Images[`bubbles/${icon}`]);
+        this.icon.anchor.set(0.5);
         this._isOccupied = true;
     }
 
@@ -62,12 +63,12 @@ export class Bubble extends Container {
     }
 
     private build() {
-        this.bkg = makeSprite({ texture: Images['game/bubble'], anchor: { x: 0.5, y: 0.5 } });
+        this.bkg = makeSprite({ texture: Images['bubbles/bubble'], anchor: { x: 0.5, y: 0.5 } });
         this.bkg.interactive = true;
         this.bkg.on('pointerdown', () => this.emit('click', this.type));
         this.addChild(this.bkg);
 
-        this.icon = makeSprite({ texture: Images['game/sword'], anchor: { x: 0.5, y: 0.5 } });
+        this.icon = new Sprite();
         this.addChild(this.icon);
 
         this.scale.set(0);

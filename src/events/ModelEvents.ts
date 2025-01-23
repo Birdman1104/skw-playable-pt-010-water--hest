@@ -10,6 +10,7 @@ export const BoardModelEvents = {
     Bubble1Update: 'BoardModelBubble1Update',
     Bubble2Update: 'BoardModelBubble2Update',
     Match3Update: 'BoardModelMatch3Update',
+    ChosenBubbleUpdate: 'BoardModelChosenBubbleUpdate',
 };
 
 export const BubbleModelEvents = {

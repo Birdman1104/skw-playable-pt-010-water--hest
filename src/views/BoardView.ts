@@ -1,8 +1,8 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
-import { AnimatedSprite, Container, Rectangle, Sprite } from 'pixi.js';
+import { AnimatedSprite, Container, Rectangle, Sprite, Texture } from 'pixi.js';
 import { Images } from '../assets';
-import { BoardEvents } from '../events/MainEvents';
+import { BoardEvents, ForegroundEvents } from '../events/MainEvents';
 import { BoardModelEvents } from '../events/ModelEvents';
 import { BoardState } from '../models/BoardModel';
 import { delayRunnable, lp, makeSprite } from '../utils';
@@ -29,13 +29,18 @@ export class BoardView extends Container {
     private bubble1: Bubble;
     private bubble2: Bubble;
 
+    private chosenBubble: string;
+    private animationElement: Sprite;
+
     constructor() {
         super();
 
         lego.event
             .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this)
+            .on(BoardModelEvents.ChosenBubbleUpdate, this.onChosenBubbleUpdate, this)
             .on(BoardModelEvents.Bubble1Update, this.onBubble1Update, this)
-            .on(BoardModelEvents.Bubble2Update, this.onBubble2Update, this);
+            .on(BoardModelEvents.Bubble2Update, this.onBubble2Update, this)
+            .on(ForegroundEvents.Match3Complete, this.onMatch3Complete, this);
         // .on(BubbleModelEvents.IsShowingUpdate, this.onBubbleShowingUpdate, this);
 
         this.build();
@@ -62,6 +67,9 @@ export class BoardView extends Container {
 
         this.buildChest();
         this.addWater();
+
+        this.animationElement = new Sprite();
+        this.addChild(this.animationElement);
 
         // drawBounds(this);
     }
@@ -130,8 +138,6 @@ export class BoardView extends Container {
             frames.push(Images[`water/${i}`]);
         }
 
-        console.warn(frames);
-
         this.waterSplash = AnimatedSprite.fromFrames(frames);
         this.waterSplash.anchor.set(0.5);
         this.waterSplash.position.set(PIRATE.targetPos.x, PIRATE.targetPos.y);
@@ -192,4 +198,87 @@ export class BoardView extends Container {
             this.bubble2?.show(bubbleModel.type);
         }
     }
+
+    private onChosenBubbleUpdate(type: string): void {
+        this.chosenBubble = type;
+    }
+
+    private onMatch3Complete(): void {
+        this.animationElement.texture = Texture.from(Images[`game/${this.chosenBubble}`]);
+
+        const { anchor, position, scale, angle } = config[this.chosenBubble];
+        this.animationElement.anchor.set(anchor.x, anchor.y);
+        this.animationElement.position.set(position.x, position.y);
+        this.animationElement.scale.set(scale.x, scale.y);
+        this.animationElement.angle = angle;
+        this.animationElement.alpha = 0;
+
+        anime({
+            targets: this.animationElement,
+            alpha: 1,
+            easing: 'easeInOutSine',
+            duration: 300,
+        });
+        if (this.chosenBubble === 'sword') {
+            this.animateSword();
+        }
+    }
+
+    private animateSword(): void {
+        const easing = 'easeInOutSine';
+        anime({
+            targets: this.animationElement.scale,
+            x: -0.7,
+            y: 0.7,
+            duration: 200,
+            easing,
+            complete: () => {
+                anime({
+                    targets: this.animationElement,
+                    x: -68,
+                    y: 208,
+                    duration: 200,
+                    easing,
+                    complete: () => {
+                        anime({
+                            targets: this.animationElement,
+                            angle: 30,
+                            duration: 200,
+                            easing,
+                            loop: 5,
+                            direction: 'alternate',
+                            complete: () => {
+                                this.chest.dropAlgae();
+                                anime({
+                                    targets: this.animationElement,
+                                    alpha: 0,
+                                    duration: 300,
+                                    easing,
+                                    complete: () => {
+                                        lego.event.emit(BoardEvents.AnimationComplete);
+                                    },
+                                });
+                                anime({
+                                    targets: this.animationElement.scale,
+                                    x: '+=0.2',
+                                    y: '+=0.2',
+                                    duration: 300,
+                                    easing,
+                                });
+                            },
+                        });
+                    },
+                });
+            },
+        });
+    }
 }
+
+const config = {
+    sword: {
+        anchor: { x: 0.9, y: 0.9 },
+        position: { x: -150, y: 192 },
+        scale: { x: -1, y: 1 },
+        angle: 0,
+    },
+};
