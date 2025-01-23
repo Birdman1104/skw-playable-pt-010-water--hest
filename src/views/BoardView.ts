@@ -1,6 +1,6 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
-import { Container, Rectangle, Sprite } from 'pixi.js';
+import { AnimatedSprite, Container, Rectangle, Sprite } from 'pixi.js';
 import { Images } from '../assets';
 import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents } from '../events/ModelEvents';
@@ -8,7 +8,6 @@ import { BoardState } from '../models/BoardModel';
 import { delayRunnable, lp, makeSprite } from '../utils';
 import { Bubble } from './Bubble';
 import { Chest } from './Chest';
-import { MatchThreeBoard } from './MatchThreeBoard';
 import { Pirate } from './pirate/Pirate';
 
 const BOUNDS = {
@@ -25,8 +24,8 @@ const PIRATE = {
 export class BoardView extends Container {
     private bkg: Sprite;
     private pirate: Pirate;
+    private waterSplash: AnimatedSprite;
     private chest: Chest;
-    private bubbles: Bubble[] = [];
     private bubble1: Bubble;
     private bubble2: Bubble;
 
@@ -59,10 +58,10 @@ export class BoardView extends Container {
         this.buildBkg();
         this.buildBubbles();
         this.buildPirate();
+        this.buildWaterSplash();
 
         this.buildChest();
         this.addWater();
-        // this.buildMatch3();
 
         // drawBounds(this);
     }
@@ -125,24 +124,24 @@ export class BoardView extends Container {
         this.addChild(this.pirate);
     }
 
-    private buildMatch3(): void {
-        const pos = [
-            { x: -400, y: 300 },
-            { x: 50, y: 300 },
-            { x: 450, y: 300 },
-        ];
-
-        const type = ['large', 'small', 'small'];
-        for (let i = 0; i < 3; i++) {
-            const board = new MatchThreeBoard(type[i] as 'large' | 'small', i);
-            board.position.set(pos[i].x, pos[i].y);
-            this.addChild(board);
-            board.scale.set(0.75);
-
-            board.on('won', () => {
-                board.hide();
-            });
+    private buildWaterSplash(): void {
+        const frames: any[] = [];
+        for (let i = 0; i <= 10; i++) {
+            frames.push(Images[`water/${i}`]);
         }
+
+        console.warn(frames);
+
+        this.waterSplash = AnimatedSprite.fromFrames(frames);
+        this.waterSplash.anchor.set(0.5);
+        this.waterSplash.position.set(PIRATE.targetPos.x, PIRATE.targetPos.y);
+        this.waterSplash.animationSpeed = 0.5;
+        this.waterSplash.loop = false;
+        this.waterSplash.visible = false;
+        this.waterSplash.onComplete = () => {
+            this.waterSplash.visible = false;
+        };
+        this.addChild(this.waterSplash);
     }
 
     private onBoardStateUpdate(state: BoardState): void {
@@ -167,6 +166,8 @@ export class BoardView extends Container {
             easing: 'easeInSine',
             duration: 500,
             complete: () => {
+                this.waterSplash.visible = true;
+                this.waterSplash.play();
                 this.pirate.idle();
                 this.pirate.float();
                 delayRunnable(0.3, () => {
