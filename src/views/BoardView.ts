@@ -7,6 +7,7 @@ import { BoardModelEvents } from '../events/ModelEvents';
 import { BoardState } from '../models/BoardModel';
 import { delayRunnable, lp, makeSprite } from '../utils';
 import { Bubble } from './Bubble';
+import { Chest } from './Chest';
 import { MatchThreeBoard } from './MatchThreeBoard';
 import { Pirate } from './pirate/Pirate';
 
@@ -24,6 +25,7 @@ const PIRATE = {
 export class BoardView extends Container {
     private bkg: Sprite;
     private pirate: Pirate;
+    private chest: Chest;
     private bubbles: Bubble[] = [];
     private bubble1: Bubble;
     private bubble2: Bubble;
@@ -57,10 +59,19 @@ export class BoardView extends Container {
         this.buildBkg();
         this.buildBubbles();
         this.buildPirate();
+
+        this.buildChest();
         this.addWater();
         // this.buildMatch3();
 
         // drawBounds(this);
+    }
+
+    private buildChest(): void {
+        this.chest = new Chest();
+        this.chest.position.set(200, 200);
+        this.chest.scale.set(1.5);
+        this.addChild(this.chest);
     }
 
     private buildBkg(): void {
@@ -69,14 +80,12 @@ export class BoardView extends Container {
     }
 
     private addWater(): void {
-        const scale = 0.8 * PIRATE.scale;
-        this.bkg = makeSprite({
-            texture: Images['pirate/water_layer'],
+        const water = makeSprite({
+            texture: Images['pirate/water'],
             anchor: { x: 0.5, y: 0.5 },
-            scale: { x: scale, y: scale },
-            position: { x: -217, y: 402 },
+            position: { x: 0, y: 430 },
         });
-        this.addChild(this.bkg);
+        this.addChild(water);
     }
 
     private buildBubbles(): void {
