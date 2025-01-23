@@ -72,6 +72,12 @@ export class BoardView extends Container {
         this.chest.position.set(200, 200);
         this.chest.scale.set(1.5);
         this.addChild(this.chest);
+
+        this.chest.float();
+
+        delayRunnable(1, () => {
+            this.chest.open();
+        });
     }
 
     private buildBkg(): void {

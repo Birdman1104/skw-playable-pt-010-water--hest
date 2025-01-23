@@ -53,9 +53,17 @@ export class Pirate extends Container {
             easing: 'easeInOutSine',
         });
         anime({
-            targets: this,
+            targets: [this.head, this.body],
             y: '+=20',
             duration: 1000,
+            direction: 'alternate',
+            loop: true,
+            easing: 'easeInOutSine',
+        });
+        anime({
+            targets: [this.head, this.body],
+            angle: [-1, 1],
+            duration: 1300,
             direction: 'alternate',
             loop: true,
             easing: 'easeInOutSine',
@@ -72,7 +80,7 @@ export class Pirate extends Container {
             texture: Images['game/wave'],
             anchor: { x: 0.5, y: 0.5 },
             scale: { x: 0.1, y: 0.1 },
-            position: { x: 0, y: 80 },
+            position: { x: 0, y: 85 },
         });
 
         this.wave.alpha = 0;

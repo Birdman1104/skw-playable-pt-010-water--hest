@@ -78,7 +78,7 @@ export class PirateBody extends Container {
         anime({
             targets: this.leftHand,
             rotation: [0.7, 0.8],
-            duration: 300,
+            duration: 600,
             direction: 'alternate',
             easing: 'linear',
             loop: true,
@@ -86,7 +86,7 @@ export class PirateBody extends Container {
         anime({
             targets: this.rightHand,
             rotation: [-0.7, -0.8],
-            duration: 300,
+            duration: 600,
             direction: 'alternate',
             easing: 'linear',
             loop: true,
