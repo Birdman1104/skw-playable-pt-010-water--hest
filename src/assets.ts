@@ -2,6 +2,11 @@
 
 export const assets = {
     images: {
+        'chest/0.png': require('../assets/images/chest/0.png').default,
+        'chest/1.png': require('../assets/images/chest/1.png').default,
+        'chest/2.png': require('../assets/images/chest/2.png').default,
+        'chest/3.png': require('../assets/images/chest/3.png').default,
+        'chest/4.png': require('../assets/images/chest/4.png').default,
         'elements/blue.png': require('../assets/images/elements/blue.png').default,
         'elements/green.png': require('../assets/images/elements/green.png').default,
         'elements/orange.png': require('../assets/images/elements/orange.png').default,
@@ -45,6 +50,11 @@ export const assets = {
 };
 
 export const Images = {
+    'chest/0': 'chest/0.png',
+    'chest/1': 'chest/1.png',
+    'chest/2': 'chest/2.png',
+    'chest/3': 'chest/3.png',
+    'chest/4': 'chest/4.png',
     'elements/blue': 'elements/blue.png',
     'elements/green': 'elements/green.png',
     'elements/orange': 'elements/orange.png',

@@ -31,7 +31,7 @@ const boardConfig = {
         tileSize: 185,
     },
 
-    sword: {
+    bomb: {
         grid: [
             ['red', 'blue', 'red'],
             ['blue', 'red', 'blue'],
@@ -44,7 +44,7 @@ const boardConfig = {
         startY: -170,
         tileSize: 170,
     },
-    bomb: {
+    sword: {
         grid: [
             ['green', 'orange', 'green'],
             ['orange', 'green', 'orange'],

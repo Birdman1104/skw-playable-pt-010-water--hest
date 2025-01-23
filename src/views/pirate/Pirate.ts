@@ -18,7 +18,6 @@ const LAYERS = [
 export class Pirate extends Container {
     private head: PirateHead;
     private body: PirateBody;
-    private water: Sprite;
     private wave: Sprite;
 
     constructor() {
@@ -36,12 +35,12 @@ export class Pirate extends Container {
     public idle(): void {
         this.body.idle();
         this.head.idle();
-        this.head.sad();
+        this.head.openMouth();
     }
 
     public float(): void {
         anime({
-            targets: this.wave,
+            targets: [this.wave],
             alpha: 1,
             duration: 300,
             easing: 'easeInOutSine',
@@ -50,12 +49,6 @@ export class Pirate extends Container {
             targets: this.wave.scale,
             x: 1,
             y: 1,
-            duration: 100,
-            easing: 'easeInOutSine',
-        });
-        anime({
-            targets: this.water,
-            alpha: 0.5,
             duration: 100,
             easing: 'easeInOutSine',
         });
@@ -75,26 +68,17 @@ export class Pirate extends Container {
 
         this.body = new PirateBody();
 
-        this.water = makeSprite({
-            texture: Images['pirate/water_layer'],
-            anchor: { x: 0.5, y: 0.5 },
-            scale: { x: 0.8, y: 0.8 },
-            position: { x: -27, y: 268 },
-        });
-
         this.wave = makeSprite({
             texture: Images['game/wave'],
             anchor: { x: 0.5, y: 0.5 },
             scale: { x: 0.1, y: 0.1 },
-            position: { x: 0, y: 130 },
+            position: { x: 0, y: 80 },
         });
 
-        this.water.alpha = 0;
         this.wave.alpha = 0;
 
         this.addChild(this.body);
         this.addChild(this.head);
-        this.addChild(this.water);
         this.addChild(this.wave);
     }
 }

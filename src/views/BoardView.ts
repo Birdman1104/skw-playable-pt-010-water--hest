@@ -17,7 +17,7 @@ const BOUNDS = {
 
 const PIRATE = {
     initialPos: { x: -200, y: -300 },
-    targetPos: { x: -200, y: 196 },
+    targetPos: { x: -200, y: 230 },
     scale: 0.7,
 };
 
@@ -57,6 +57,7 @@ export class BoardView extends Container {
         this.buildBkg();
         this.buildBubbles();
         this.buildPirate();
+        this.addWater();
         // this.buildMatch3();
 
         // drawBounds(this);
@@ -64,6 +65,17 @@ export class BoardView extends Container {
 
     private buildBkg(): void {
         this.bkg = makeSprite({ texture: Images['game/bkg'], scale: { x: 1.5, y: 1.5 } });
+        this.addChild(this.bkg);
+    }
+
+    private addWater(): void {
+        const scale = 0.8 * PIRATE.scale;
+        this.bkg = makeSprite({
+            texture: Images['pirate/water_layer'],
+            anchor: { x: 0.5, y: 0.5 },
+            scale: { x: scale, y: scale },
+            position: { x: -217, y: 402 },
+        });
         this.addChild(this.bkg);
     }
 
