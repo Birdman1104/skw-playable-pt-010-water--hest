@@ -35,6 +35,8 @@ export class Pirate extends Container {
 
     public idle(): void {
         this.body.idle();
+        this.head.idle();
+        this.head.sad();
     }
 
     public float(): void {
@@ -72,7 +74,6 @@ export class Pirate extends Container {
         this.head.openMouth();
 
         this.body = new PirateBody();
-        this.body.idle();
 
         this.water = makeSprite({
             texture: Images['pirate/water_layer'],

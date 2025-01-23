@@ -5,7 +5,17 @@ export const AdModelEvents = {
     HintUpdate: 'AdModelHintUpdate',
 };
 
-export const BoardModelEvents = { StateUpdate: 'BoardModelStateUpdate' };
+export const BoardModelEvents = {
+    StateUpdate: 'BoardModelStateUpdate',
+    Bubble1Update: 'BoardModelBubble1Update',
+    Bubble2Update: 'BoardModelBubble2Update',
+};
+
+export const BubbleModelEvents = {
+    TypeUpdate: 'BubbleModelTypeUpdate',
+    IsSolvedUpdate: 'BubbleModelIsSolvedUpdate',
+    IsShowingUpdate: 'BubbleModelIsShowingUpdate',
+};
 
 export const CtaModelEvents = { VisibleUpdate: 'CtaModelVisibleUpdate' };
 

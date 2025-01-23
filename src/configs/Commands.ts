@@ -1,5 +1,6 @@
 import { lego } from '@armathai/lego';
 import { AdStatus } from '../models/AdModel';
+import { BoardState } from '../models/BoardModel';
 import { GameState } from '../models/GameModel';
 import Head from '../models/HeadModel';
 import { HintState } from '../models/HintModel';
@@ -133,6 +134,10 @@ export const resizeCommand = (): void => {
 
         .guard(hintModelGuard)
         .execute(startHintVisibilityTimerCommand);
+};
+
+export const setBoardStateCommand = (state: BoardState): void => {
+    Head.gameModel?.board?.setState(state);
 };
 
 export const onSoundToggleCommand = (): void => {

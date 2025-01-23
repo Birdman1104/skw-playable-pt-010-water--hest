@@ -2,9 +2,11 @@ import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, Rectangle, Sprite } from 'pixi.js';
 import { Images } from '../assets';
+import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents } from '../events/ModelEvents';
 import { BoardState } from '../models/BoardModel';
-import { lp, makeSprite } from '../utils';
+import { delayRunnable, lp, makeSprite } from '../utils';
+import { Bubble } from './Bubble';
 import { MatchThreeBoard } from './MatchThreeBoard';
 import { Pirate } from './pirate/Pirate';
 
@@ -14,19 +16,24 @@ const BOUNDS = {
 };
 
 const PIRATE = {
-    initialPos: { x: -100, y: -300 },
-    targetPos: { x: -100, y: 196 },
+    initialPos: { x: -200, y: -300 },
+    targetPos: { x: -200, y: 196 },
     scale: 0.7,
 };
 
 export class BoardView extends Container {
     private bkg: Sprite;
     private pirate: Pirate;
+    private bubbles: Bubble[] = [];
 
     constructor() {
         super();
 
-        lego.event.on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this);
+        lego.event
+            .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this)
+            .on(BoardModelEvents.Bubble1Update, this.onBubble1Update, this)
+            .on(BoardModelEvents.Bubble2Update, this.onBubble2Update, this);
+        // .on(BubbleModelEvents.IsShowingUpdate, this.onBubbleShowingUpdate, this);
 
         this.build();
     }
@@ -46,6 +53,7 @@ export class BoardView extends Container {
 
     private build(): void {
         this.buildBkg();
+        this.buildBubbles();
         this.buildPirate();
         // this.buildMatch3();
 
@@ -55,6 +63,20 @@ export class BoardView extends Container {
     private buildBkg(): void {
         this.bkg = makeSprite({ texture: Images['game/bkg'], scale: { x: 1.5, y: 1.5 } });
         this.addChild(this.bkg);
+    }
+
+    private buildBubbles(): void {
+        const pos = [
+            { x: -120, y: -370 },
+            { x: 150, y: -200 },
+        ];
+
+        for (let i = 0; i < 2; i++) {
+            const bubble = new Bubble();
+            bubble.position.set(pos[i].x, pos[i].y);
+            this.addChild(bubble);
+            this.bubbles.push(bubble);
+        }
     }
 
     private buildPirate(): void {
@@ -112,7 +134,20 @@ export class BoardView extends Container {
             complete: () => {
                 this.pirate.idle();
                 this.pirate.float();
+                delayRunnable(0.3, () => {
+                    lego.event.emit(BoardEvents.FallComplete);
+                });
             },
         });
+    }
+
+    private onBubble1Update(bubbleModel): void {
+        const bubble = this.bubbles.find((b) => !b.isOccupied);
+        bubble?.show(bubbleModel.type);
+    }
+
+    private onBubble2Update(bubbleModel): void {
+        const bubble = this.bubbles.find((b) => !b.isOccupied);
+        bubble?.show(bubbleModel.type);
     }
 }

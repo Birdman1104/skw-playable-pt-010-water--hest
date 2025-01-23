@@ -124,6 +124,6 @@ export class PirateHead extends Container {
     }
 
     private getMouths(): Sprite[] {
-        return [this.mouthClosed, this.mouthMid, this.mouthOpen, this.mouthPleased, this.mouthSad];
+        return [this.mouthScared, this.mouthClosed, this.mouthMid, this.mouthOpen, this.mouthPleased, this.mouthSad];
     }
 }

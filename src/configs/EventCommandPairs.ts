@@ -1,6 +1,6 @@
 import { lego } from '@armathai/lego';
-import { MainGameEvents, SoundEvents, TakeMe } from '../events/MainEvents';
-import { AdModelEvents, GameModelEvents } from '../events/ModelEvents';
+import { BoardEvents, MainGameEvents, SoundEvents, TakeMe } from '../events/MainEvents';
+import { AdModelEvents, BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
 import {
     onAdStatusUpdateCommand,
     onGameStateUpdateCommand,
@@ -9,6 +9,7 @@ import {
     resizeCommand,
     takeToStoreCommand,
 } from './Commands';
+import { onBoardStateUpdateCommand, onPirateFallCompleteCommand } from './GameCommands';
 
 export const mapCommands = () => {
     eventCommandPairs.forEach(({ event, command }) => {
@@ -46,5 +47,13 @@ const eventCommandPairs = Object.freeze([
     {
         event: SoundEvents.SoundToggle,
         command: onSoundToggleCommand,
+    },
+    {
+        event: BoardEvents.FallComplete,
+        command: onPirateFallCompleteCommand,
+    },
+    {
+        event: BoardModelEvents.StateUpdate,
+        command: onBoardStateUpdateCommand,
     },
 ]);

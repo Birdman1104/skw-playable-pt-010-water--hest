@@ -10,7 +10,7 @@ export const MainGameEvents = {
 };
 
 export const BoardEvents = {
-    //
+    FallComplete: 'BoardEventsFallComplete',
 };
 
 export const TakeMe = {
