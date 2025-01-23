@@ -17,6 +17,7 @@ export class ForegroundView extends PixiGrid {
     private sound: Sound;
     private hint: HintView | null;
     private match3Wrapper: Container;
+    private match3Board: MatchThreeBoard;
 
     constructor() {
         super();
@@ -90,34 +91,39 @@ export class ForegroundView extends PixiGrid {
     }
 
     private onMatch3Update(match3: Match3Model): void {
-        console.warn('onMatch3Update', match3);
-        const match3Board = new MatchThreeBoard(match3);
+        if (!match3) {
+            this.match3Wrapper.removeChild(this.match3Board);
+            this.match3Board?.destroy();
+            return;
+        }
 
-        this.match3Wrapper.width = match3Board.width;
-        this.match3Wrapper.height = match3Board.height;
-        this.match3Wrapper.addChild(match3Board);
+        this.match3Board = new MatchThreeBoard(match3);
+
+        this.match3Wrapper.width = this.match3Board.width;
+        this.match3Wrapper.height = this.match3Board.height;
+        this.match3Wrapper.addChild(this.match3Board);
 
         this.rebuild();
 
-        match3Board.scale.set(0);
+        this.match3Board.scale.set(0);
         anime({
-            targets: match3Board.scale,
+            targets: this.match3Board.scale,
             x: 1,
             y: 1,
             duration: 300,
             easing: 'easeOutBack',
         });
 
-        match3Board.on('won', () => {
+        this.match3Board.on('won', () => {
             anime({
-                targets: match3Board.scale,
+                targets: this.match3Board.scale,
                 x: 0,
                 y: 0,
                 duration: 300,
-                easing: 'easeOutBack',
+                easing: 'easeOutSine',
                 complete: () => {
-                    match3Board.destroy();
-                    this.emit(ForegroundEvents.Match3Complete);
+                    this.match3Board.destroy();
+                    lego.event.emit(ForegroundEvents.Match3Complete);
                 },
             });
         });

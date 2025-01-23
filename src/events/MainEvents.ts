@@ -15,7 +15,7 @@ export const BoardEvents = {
 };
 
 export const ForegroundEvents = {
-    Match3Complete: 'BoardEventsMatch3Complete',
+    Match3Complete: 'ForegroundEventsMatch3Complete',
 };
 
 export const TakeMe = {

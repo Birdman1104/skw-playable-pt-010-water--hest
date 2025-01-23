@@ -21,3 +21,7 @@ export const onBoardStateUpdateCommand = (state: BoardState) => {
 export const onBubbleClickCommand = (type: string) => {
     Head.gameModel?.board?.bubbleClick(type);
 };
+
+export const onMatch3CompleteCommand = () => {
+    Head.gameModel?.board?.match3Complete();
+};

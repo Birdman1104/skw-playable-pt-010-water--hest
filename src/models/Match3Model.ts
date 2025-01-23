@@ -2,7 +2,7 @@ import { BubbleType } from './BubbleModel';
 import { ObservableModel } from './ObservableModel';
 
 const boardConfig = {
-    bomb: {
+    ship: {
         grid: [
             ['orange', 'pink', 'blue', 'green'],
             ['pink', 'orange', 'blue', 'green'],
@@ -44,7 +44,7 @@ const boardConfig = {
         startY: -170,
         tileSize: 170,
     },
-    asd: {
+    bomb: {
         grid: [
             ['green', 'orange', 'green'],
             ['orange', 'green', 'orange'],

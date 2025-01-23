@@ -25,6 +25,8 @@ export class BoardView extends Container {
     private bkg: Sprite;
     private pirate: Pirate;
     private bubbles: Bubble[] = [];
+    private bubble1: Bubble;
+    private bubble2: Bubble;
 
     constructor() {
         super();
@@ -71,16 +73,23 @@ export class BoardView extends Container {
             { x: 150, y: -200 },
         ];
 
-        for (let i = 0; i < 2; i++) {
-            const bubble = new Bubble();
-            bubble.position.set(pos[i].x, pos[i].y);
-            bubble.on('click', (type) => {
-                lego.event.emit(BoardEvents.BubbleClick, type);
-                this.bubbles.forEach((b) => b.hide());
-            });
-            this.addChild(bubble);
-            this.bubbles.push(bubble);
-        }
+        [this.bubble1, this.bubble2].forEach((b, i) => {});
+
+        this.bubble1 = new Bubble();
+        this.bubble1.position.set(pos[0].x, pos[0].y);
+        this.bubble1.on('click', (type) => {
+            lego.event.emit(BoardEvents.BubbleClick, type);
+            this.bubble1.hide();
+        });
+        this.addChild(this.bubble1);
+
+        this.bubble2 = new Bubble();
+        this.bubble2.position.set(pos[1].x, pos[1].y);
+        this.bubble2.on('click', (type) => {
+            lego.event.emit(BoardEvents.BubbleClick, type);
+            this.bubble2.hide();
+        });
+        this.addChild(this.bubble2);
     }
 
     private buildPirate(): void {
@@ -146,12 +155,18 @@ export class BoardView extends Container {
     }
 
     private onBubble1Update(bubbleModel): void {
-        const bubble = this.bubbles.find((b) => !b.isOccupied);
-        bubble?.show(bubbleModel.type);
+        if (!bubbleModel) {
+            this.bubble1?.hide();
+        } else {
+            this.bubble1?.show(bubbleModel.type);
+        }
     }
 
     private onBubble2Update(bubbleModel): void {
-        const bubble = this.bubbles.find((b) => !b.isOccupied);
-        bubble?.show(bubbleModel.type);
+        if (!bubbleModel) {
+            this.bubble2?.hide();
+        } else {
+            this.bubble2?.show(bubbleModel.type);
+        }
     }
 }

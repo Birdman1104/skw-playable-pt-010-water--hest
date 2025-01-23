@@ -36,6 +36,8 @@ export class Bubble extends Container {
     }
 
     public show(type: string) {
+        console.warn('TYPE', type);
+
         this.type = type;
         this.updateIcon(type);
         anime({
@@ -51,7 +53,6 @@ export class Bubble extends Container {
     }
 
     public updateIcon(icon: string) {
-        if (this.isOccupied) return;
         this.icon.texture = Texture.from(Images[`game/${icon}`]);
         this._isOccupied = true;
     }
