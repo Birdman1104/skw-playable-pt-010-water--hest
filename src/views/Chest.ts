@@ -119,14 +119,7 @@ export class Chest extends Container {
         this.animatedChest.loop = false;
         this.animatedChest.visible = false;
 
-        // this.animatedChest.play();
-        console.warn('this.animatedChest', this.animatedChest);
-
-        // this.animatedChest.onComplete = () => {
-        //     this.animatedChest.destroy();
-        // };
         this.animatedChest.onFrameChange = (frame: number) => {
-            // add coins on 3rd frame
             if (frame === 1) {
                 this.coins.visible = true;
                 anime({
