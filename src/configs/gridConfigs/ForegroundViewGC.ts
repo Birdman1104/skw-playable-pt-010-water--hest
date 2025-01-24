@@ -18,7 +18,8 @@ const getForegroundGridLandscapeConfig = () => {
             },
             {
                 name: 'pcta',
-                bounds: { x: 0.775, y: 0.8, width: 0.2, height: 0.175 },
+                bounds: { x: 0.8, y: 0.8, width: 0.2, height: 0.2 },
+                offset: { x: -10, y: -10 },
             },
             {
                 name: 'logo',
@@ -56,7 +57,7 @@ const getForegroundGridPortraitConfig = () => {
             },
             {
                 name: 'pcta',
-                bounds: { x: 0.5, y: 0.9, width: 0.4, height: 0.075 },
+                bounds: { x: 0.1, y: 0.9, width: 0.8, height: 0.075 },
             },
             {
                 name: 'sound',

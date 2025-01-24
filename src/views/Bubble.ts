@@ -21,17 +21,17 @@ export class Bubble extends Container {
         return this._isOccupied;
     }
 
+    public disable(): void {
+        this.bkg.interactive = false;
+    }
+
     public hide() {
-        this.bkg.interactive = true;
         anime({
             targets: this.scale,
             x: 0,
             y: 0,
             duration: 300,
             easing: 'easeOutBack',
-            complete: () => {
-                this.bkg.interactive = true;
-            },
         });
     }
 
@@ -63,7 +63,10 @@ export class Bubble extends Container {
     private build() {
         this.bkg = makeSprite({ texture: Images['bubbles/bubble'], anchor: { x: 0.5, y: 0.5 } });
         this.bkg.interactive = true;
-        this.bkg.on('pointerdown', () => this.emit('click', this.type));
+        this.bkg.on('pointerdown', (e) => {
+            //
+            this.emit('click', this.type);
+        });
         this.addChild(this.bkg);
 
         this.icon = new Sprite();

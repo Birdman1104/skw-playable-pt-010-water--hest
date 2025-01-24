@@ -15,7 +15,7 @@ class App extends Application {
 
     public constructor() {
         super({
-            backgroundColor: 0x73a01c,
+            backgroundColor: 0x000000,
             powerPreference: 'high-performance',
             antialias: true,
             resolution: Math.max(window.devicePixelRatio || 1, 2),
@@ -29,6 +29,9 @@ class App extends Application {
         this.view.classList.add('app');
         // @ts-ignore
         document.body.appendChild(this.view);
+
+        this.renderer.plugins.interaction.autoPreventDefault = false;
+        this.renderer.plugins.interaction.multitouch = false;
 
         globalThis.__PIXI_APP__ = this;
         if (process.env.NODE_ENV !== 'production') {

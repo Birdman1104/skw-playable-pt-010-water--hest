@@ -27,6 +27,14 @@ export class MatchSprite extends Container {
         return this._type;
     }
 
+    public enable(): void {
+        this.sprite.interactive = true;
+    }
+
+    public disable(): void {
+        this.sprite.interactive = false;
+    }
+
     public explode(cb?): void {
         this.splash.visible = true;
         this.splash.play();

@@ -12,13 +12,13 @@ import { Chest } from './Chest';
 import { Pirate } from './pirate/Pirate';
 
 const BOUNDS = {
-    L: { x: -425, y: -450, w: 850, h: 900 },
+    L: { x: -425, y: -350, w: 850, h: 750 },
     P: { x: -425, y: -800, w: 850, h: 1600 },
 };
 
 const PIRATE = {
     initialPos: { x: -200, y: -300 },
-    targetPos: { x: -200, y: 230 },
+    targetPos: { x: -200, y: 280 },
     scale: 0.7,
 };
 
@@ -78,7 +78,7 @@ export class BoardView extends Container {
 
     private buildChest(): void {
         this.chest = new Chest();
-        this.chest.position.set(200, 260);
+        this.chest.position.set(200, 220);
         this.chest.scale.set(1.5);
         this.addChild(this.chest);
         this.chest.float();
@@ -100,8 +100,8 @@ export class BoardView extends Container {
 
     private buildBubbles(): void {
         const pos = [
-            { x: -120, y: -320 },
-            { x: 150, y: -150 },
+            { x: -120, y: -180 },
+            { x: 120, y: -80 },
         ];
 
         [this.bubble1, this.bubble2].forEach((b, i) => {});
@@ -109,6 +109,7 @@ export class BoardView extends Container {
         this.bubble1 = new Bubble();
         this.bubble1.position.set(pos[0].x, pos[0].y);
         this.bubble1.on('click', (type) => {
+            this.bubble2.disable();
             lego.event.emit(BoardEvents.BubbleClick, type);
         });
         this.addChild(this.bubble1);
@@ -116,6 +117,8 @@ export class BoardView extends Container {
         this.bubble2 = new Bubble();
         this.bubble2.position.set(pos[1].x, pos[1].y);
         this.bubble2.on('click', (type) => {
+            this.bubble1.disable();
+
             lego.event.emit(BoardEvents.BubbleClick, type);
         });
         this.addChild(this.bubble2);
@@ -151,7 +154,6 @@ export class BoardView extends Container {
     }
 
     private onBoardStateUpdate(state: BoardState): void {
-        console.warn('BoardView.onBoardStateUpdate', BoardState[state]);
         switch (state) {
             case BoardState.PirateFalls:
                 this.onPirateFalls();
@@ -245,8 +247,6 @@ export class BoardView extends Container {
             });
             this.animateSword();
         } else if (this.chosenBubble === 'key') {
-            console.warn('key', this.chosenBubble);
-
             this.animationElement.texture = Texture.from(Images[`game/${this.chosenBubble}`]);
             const { anchor, position, scale, angle } = config[this.chosenBubble];
             this.animationElement.anchor.set(anchor.x, anchor.y);
@@ -319,7 +319,7 @@ export class BoardView extends Container {
         anime({
             targets: this.animationElement,
             x: 130,
-            y: 320,
+            y: 300,
             duration: 300,
             delay,
             easing,

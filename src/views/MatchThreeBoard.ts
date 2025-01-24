@@ -1,7 +1,7 @@
 import anime from 'animejs';
 import { Container, Sprite } from 'pixi.js';
 import { Images } from '../assets';
-import { delayRunnable, makeSprite } from '../utils';
+import { callIfExists, delayRunnable, makeSprite } from '../utils';
 import { MatchSprite } from './MatchSprite';
 
 export class MatchThreeBoard extends Container {
@@ -70,6 +70,8 @@ export class MatchThreeBoard extends Container {
     }
 
     private onDragStart(event, sprite) {
+        if (this.draggedElement) return;
+
         this.data = event.data;
         this.draggedElement = sprite;
         this.dragStartPosition = event.data.getLocalPosition(this);
@@ -88,6 +90,7 @@ export class MatchThreeBoard extends Container {
 
     private onDragEnd() {
         if (this.draggedElement) {
+            this.board.forEach((col) => col.forEach((e) => e?.disable()));
             const dragEndPosition = this.data.getLocalPosition(this);
 
             const dx = dragEndPosition.x - this.dragStartPosition.x;
@@ -119,15 +122,20 @@ export class MatchThreeBoard extends Container {
                     targetRow--;
                 }
             }
+
+            const cb = () => {
+                this.board.forEach((col) => col.forEach((e) => e?.enable()));
+            };
             if (targetRow !== this.dragStartBoardPosition.row || targetCol !== this.dragStartBoardPosition.col) {
                 this.swapElements(
                     this.dragStartBoardPosition.row,
                     this.dragStartBoardPosition.col,
                     targetRow,
                     targetCol,
+                    cb,
                 );
             } else {
-                this.resetElementPosition(this.draggedElement);
+                this.resetElementPosition(this.draggedElement, cb);
             }
 
             this.draggedElement = null;
@@ -135,7 +143,7 @@ export class MatchThreeBoard extends Container {
         }
     }
 
-    private swapElements(row1, col1, row2, col2) {
+    private swapElements(row1, col1, row2, col2, cb?) {
         const element1 = this.board[col1][row1];
         const element2 = this.board[col2][row2];
 
@@ -150,6 +158,7 @@ export class MatchThreeBoard extends Container {
                     y: tempY,
                     duration: 100,
                     easing: 'easeInOutSine',
+                    complete: () => callIfExists(cb),
                 });
             }
             if (element2) {
@@ -162,6 +171,7 @@ export class MatchThreeBoard extends Container {
                     y: tempY,
                     duration: 100,
                     easing: 'easeInOutSine',
+                    complete: () => callIfExists(cb),
                 });
             }
             return;
@@ -220,6 +230,7 @@ export class MatchThreeBoard extends Container {
 
                             element1.boardPosition = { row: row1, col: col1 };
                             element2.boardPosition = { row: row2, col: col2 };
+                            callIfExists(cb);
                         },
                     });
 
@@ -229,17 +240,18 @@ export class MatchThreeBoard extends Container {
                 delayRunnable(0.3, () => {
                     const { startX: sx, startY: sy, tileSize, rows, cols } = this.config;
 
-                    const cb = () => {
+                    const callback = () => {
                         if (this.board.every((col) => col.every((el) => el === null))) {
                             delayRunnable(0.3, () => {
                                 this.emit('won');
+                                callIfExists(cb);
                             });
                         }
                     };
                     matches.forEach((element, i) => {
                         this.board[element.boardPosition.col][element.boardPosition.row] = null;
 
-                        element.explode(i === matches.length - 1 ? cb : null);
+                        element.explode(i === matches.length - 1 ? callback : null);
                     });
 
                     for (let col = 0; col < cols; col++) {
@@ -268,6 +280,7 @@ export class MatchThreeBoard extends Container {
                                     y,
                                     duration: 100,
                                     easing: 'easeInOutSine',
+                                    complete: () => callIfExists(cb),
                                 });
 
                                 element.originalPosition = { x, y };
@@ -324,8 +337,9 @@ export class MatchThreeBoard extends Container {
         return matches.filter((v, i, a) => a.indexOf(v) === i);
     }
 
-    private resetElementPosition(element) {
+    private resetElementPosition(element, cb?) {
         element.x = element.originalPosition.x;
         element.y = element.originalPosition.y;
+        callIfExists(cb);
     }
 }
