@@ -53,11 +53,12 @@ export class Chest extends Container {
         if (this.algae.length === 0) return;
 
         this.algae.forEach((algae, i) => {
-            const angle = Math.random() * 50 - 25;
+            const da = 130;
+            const angle = Math.random() * da - da / 2;
             anime({
                 targets: algae,
                 angle,
-                y: 170,
+                y: 120,
                 alpha: 0,
                 duration: 1000,
                 easing: 'easeOutQuad',

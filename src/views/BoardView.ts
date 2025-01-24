@@ -78,7 +78,7 @@ export class BoardView extends Container {
 
     private buildChest(): void {
         this.chest = new Chest();
-        this.chest.position.set(200, 200);
+        this.chest.position.set(200, 260);
         this.chest.scale.set(1.5);
         this.addChild(this.chest);
         this.chest.float();
@@ -221,7 +221,7 @@ export class BoardView extends Container {
             anime({
                 targets: bomb,
                 x: 165,
-                y: 225,
+                y: 285,
                 duration: 500,
                 easing,
                 complete: () => {
@@ -247,6 +247,15 @@ export class BoardView extends Container {
                 duration: 300,
             });
             this.animateSword();
+        } else if (this.chosenBubble === 'key') {
+            this.animationElement.texture = Texture.from(Images[`game/${this.chosenBubble}`]);
+            const { anchor, position, scale, angle } = config[this.chosenBubble];
+            this.animationElement.anchor.set(anchor.x, anchor.y);
+            this.animationElement.position.set(position.x, position.y);
+            this.animationElement.scale.set(scale.x, scale.y);
+            this.animationElement.angle = angle;
+            // this.animationElement.alpha = 0;
+            this.animateKey();
         }
     }
 
@@ -261,7 +270,7 @@ export class BoardView extends Container {
                 anime({
                     targets: this.animationElement,
                     x: -68,
-                    y: 208,
+                    y: 268,
                     duration: 200,
                     easing,
                     complete: () => {
@@ -297,6 +306,55 @@ export class BoardView extends Container {
             },
         });
     }
+
+    private animateKey(): void {
+        const delay = 150;
+        anime({
+            targets: this.animationElement.scale,
+            x: 0.3,
+            y: 0.3,
+            duration: 300,
+            delay,
+            easing,
+        });
+        anime({
+            targets: this.animationElement,
+            x: 130,
+            y: 320,
+            duration: 300,
+            delay,
+            easing,
+            complete: () => {
+                anime({
+                    targets: this.animationElement.scale,
+                    y: -0.3,
+                    duration: 200,
+                    direction: 'alternate',
+                    easing,
+                    complete: () => {
+                        this.chest.dropAlgae();
+                        this.chest.open();
+                        anime({
+                            targets: this.animationElement,
+                            alpha: 0,
+                            duration: 300,
+                            easing,
+                            complete: () => {
+                                lego.event.emit(BoardEvents.AnimationComplete);
+                            },
+                        });
+                        anime({
+                            targets: this.animationElement.scale,
+                            x: '+=0.2',
+                            y: '+=0.2',
+                            duration: 300,
+                            easing,
+                        });
+                    },
+                });
+            },
+        });
+    }
 }
 
 const config = {
@@ -307,6 +365,12 @@ const config = {
         angle: 0,
     },
     bomb: {
+        anchor: { x: 0.5, y: 0.5 },
+        position: { x: 0, y: 0 },
+        scale: { x: 1, y: 1 },
+        angle: 0,
+    },
+    key: {
         anchor: { x: 0.5, y: 0.5 },
         position: { x: 0, y: 0 },
         scale: { x: 1, y: 1 },

@@ -36,8 +36,6 @@ export class Bubble extends Container {
     }
 
     public show(type: string) {
-        console.warn('TYPE', type);
-
         this.type = type;
         this.updateIcon(type);
         anime({
