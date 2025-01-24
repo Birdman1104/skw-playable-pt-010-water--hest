@@ -1,7 +1,7 @@
 import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import anime from 'animejs';
-import { Container } from 'pixi.js';
+import { Container, Graphics } from 'pixi.js';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { ForegroundEvents } from '../events/MainEvents';
 import { AdModelEvents, BoardModelEvents, SoundModelEvents } from '../events/ModelEvents';
@@ -18,6 +18,7 @@ export class ForegroundView extends PixiGrid {
     private hint: HintView | null;
     private match3Wrapper: Container;
     private match3Board: MatchThreeBoard;
+    private blocker: Graphics;
 
     constructor() {
         super();
@@ -45,6 +46,13 @@ export class ForegroundView extends PixiGrid {
     }
 
     private build(): void {
+        this.blocker = new Graphics();
+        this.blocker.beginFill(0x000000, 1);
+        this.blocker.drawRect(0, 0, 10, 10);
+        this.blocker.endFill();
+        this.blocker.alpha = 0;
+        this.setChild('blocker', this.blocker);
+
         this.match3Wrapper = new Container();
         this.setChild('match3', this.match3Wrapper);
     }
@@ -113,6 +121,12 @@ export class ForegroundView extends PixiGrid {
             duration: 300,
             easing: 'easeOutBack',
         });
+        anime({
+            targets: this.blocker,
+            alpha: 0.4,
+            duration: 300,
+            easing: 'easeOutBack',
+        });
 
         this.match3Board.on('won', () => {
             anime({
@@ -125,6 +139,13 @@ export class ForegroundView extends PixiGrid {
                     this.match3Board.destroy();
                     lego.event.emit(ForegroundEvents.Match3Complete);
                 },
+            });
+
+            anime({
+                targets: this.blocker,
+                alpha: 0,
+                duration: 300,
+                easing: 'easeOutBack',
             });
         });
     }
