@@ -145,6 +145,7 @@ export const onSoundToggleCommand = (): void => {
 };
 
 export const takeToStoreCommand = (): void => {
+    lego.command.payload(AdStatus.Cta).execute(setAdStatusCommand);
     // if (!window.installCTA) {
     window.CTACallImitation && window.CTACallImitation();
     // } else {

@@ -2,13 +2,15 @@ import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import anime from 'animejs';
 import { Container, Graphics } from 'pixi.js';
+import { Images } from '../assets';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
-import { ForegroundEvents } from '../events/MainEvents';
+import { ForegroundEvents, TakeMe } from '../events/MainEvents';
 import { AdModelEvents, BoardModelEvents, SoundModelEvents } from '../events/ModelEvents';
 import { AdStatus } from '../models/AdModel';
 import { HintModel } from '../models/HintModel';
 import { Match3Model } from '../models/Match3Model';
 import { SoundModel, SoundState } from '../models/SoundModel';
+import { makeSprite } from '../utils';
 import { HintView } from './HintView';
 import { MatchThreeBoard } from './MatchThreeBoard';
 import { Sound } from './SoundView';
@@ -55,6 +57,20 @@ export class ForegroundView extends PixiGrid {
 
         this.match3Wrapper = new Container();
         this.setChild('match3', this.match3Wrapper);
+
+        const pcta = makeSprite({ texture: Images['game/pcta'] });
+        pcta.interactive = true;
+        pcta.on('pointerdown', () => {
+            lego.event.emit(TakeMe.ToStore);
+        });
+        this.setChild('pcta', pcta);
+
+        const logo = makeSprite({ texture: Images['game/logo'] });
+        logo.interactive = true;
+        logo.on('pointerdown', () => {
+            lego.event.emit(TakeMe.ToStore);
+        });
+        this.setChild('logo', logo);
     }
 
     private onStatusUpdate(status: AdStatus): void {
