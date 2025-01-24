@@ -1,13 +1,18 @@
 import anime from 'animejs';
-import { AnimatedSprite, Container, Sprite } from 'pixi.js';
+import { Container, Sprite } from 'pixi.js';
 import { Images } from '../assets';
 import { makeSprite } from '../utils';
 
+const algaePositions = [
+    { x: 0, y: 30 },
+    { x: -30, y: 30 },
+    { x: 0, y: 30 },
+    { x: 30, y: 30 },
+];
+
 export class Chest extends Container {
-    private staticChest: Sprite;
-    private lock: Sprite;
-    private coins: Sprite;
-    private animatedChest: AnimatedSprite;
+    private chestClosed: Sprite;
+    private chestOpen: Sprite;
     private algae: Sprite[] = [];
 
     constructor() {
@@ -36,16 +41,16 @@ export class Chest extends Container {
 
     public open(): void {
         anime({
-            targets: this.lock.scale,
-            x: 0,
-            y: 0,
+            targets: this.chestClosed,
+            alpha: 0,
             duration: 300,
             easing: 'easeInOutSine',
-            complete: () => {
-                this.staticChest.visible = false;
-                this.animatedChest.visible = true;
-                this.animatedChest.play();
-            },
+        });
+        anime({
+            targets: this.chestOpen,
+            alpha: 1,
+            duration: 300,
+            easing: 'easeInOutSine',
         });
     }
 
@@ -73,75 +78,36 @@ export class Chest extends Container {
     }
 
     private build(): void {
-        this.buildStaticSprite();
-        this.buildLock();
-        this.buildAnimatedChest();
-        this.buildCoins();
+        this.buildOpenChest();
+        this.buildClosedChest();
         this.buildAlgae();
     }
 
-    private buildStaticSprite(): void {
-        this.staticChest = makeSprite({ texture: Images['chest/0'], anchor: { x: 0.5, y: 0.5 } });
-        this.addChild(this.staticChest);
-    }
-
-    private buildLock(): void {
-        this.lock = makeSprite({ texture: Images['chest/lock'], anchor: { x: 0.5, y: 0.7 }, scale: { x: 0.9, y: 1 } });
-        this.lock.y = 46;
-        this.addChild(this.lock);
-    }
-
-    private buildCoins(): void {
-        this.coins = makeSprite({
-            texture: Images['chest/coins'],
+    private buildOpenChest(): void {
+        this.chestOpen = makeSprite({
+            texture: Images['chest/open'],
             anchor: { x: 0.5, y: 0.5 },
+            scale: { x: 0.55, y: 0.55 },
+            position: { x: 0, y: 10 },
         });
-        this.coins.scale.set(0);
-        this.coins.alpha = 0;
-        this.coins.visible = false;
-        this.addChild(this.coins);
+        this.addChild(this.chestOpen);
+    }
+
+    private buildClosedChest(): void {
+        this.chestClosed = makeSprite({
+            texture: Images['chest/closed'],
+            anchor: { x: 0.5, y: 0.5 },
+            scale: { x: 0.6, y: 0.6 },
+        });
+        this.addChild(this.chestClosed);
     }
 
     private buildAlgae(): void {
         for (let i = 1; i <= 4; i++) {
             const algae = makeSprite({ texture: Images[`chest/algae_${i}`], anchor: { x: 0.5, y: 0.5 } });
-            algae.position.set(0, 57);
+            algae.position.set(algaePositions[i - 1].x, algaePositions[i - 1].y);
             this.algae.push(algae);
             this.addChild(algae);
         }
-    }
-
-    private buildAnimatedChest(): void {
-        const frames: any[] = [];
-        for (let i = 0; i <= 4; i++) {
-            frames.push(Images[`chest/${i}`]);
-        }
-
-        this.animatedChest = AnimatedSprite.fromFrames(frames);
-        this.animatedChest.anchor.set(0.5);
-        this.animatedChest.animationSpeed = 0.25;
-        this.animatedChest.loop = false;
-        this.animatedChest.visible = false;
-
-        this.animatedChest.onFrameChange = (frame: number) => {
-            if (frame === 1) {
-                this.coins.visible = true;
-                anime({
-                    targets: this.coins.scale,
-                    x: 1,
-                    y: 1,
-                    duration: 250,
-                    easing: 'easeInOutSine',
-                });
-
-                anime({
-                    targets: this.coins,
-                    alpha: 1,
-                    duration: 250,
-                    easing: 'easeInOutSine',
-                });
-            }
-        };
-        this.addChild(this.animatedChest);
     }
 }

@@ -29,6 +29,7 @@ export class MatchSprite extends Container {
 
     public enable(): void {
         this.sprite.interactive = true;
+        this.sprite.scale.set(1);
     }
 
     public disable(): void {

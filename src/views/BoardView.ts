@@ -78,7 +78,7 @@ export class BoardView extends Container {
 
     private buildChest(): void {
         this.chest = new Chest();
-        this.chest.position.set(200, 220);
+        this.chest.position.set(250, 220);
         this.chest.scale.set(1.5);
         this.addChild(this.chest);
         this.chest.float();
@@ -221,7 +221,7 @@ export class BoardView extends Container {
             anime({
                 targets: bomb,
                 x: 165,
-                y: 285,
+                y: 255,
                 duration: 500,
                 easing,
                 complete: () => {
@@ -269,13 +269,13 @@ export class BoardView extends Container {
                 anime({
                     targets: this.animationElement,
                     x: -68,
-                    y: 268,
+                    y: 180,
                     duration: 200,
                     easing,
                     complete: () => {
                         anime({
                             targets: this.animationElement,
-                            angle: 30,
+                            angle: 70,
                             duration: 200,
                             easing,
                             loop: 5,
@@ -319,7 +319,7 @@ export class BoardView extends Container {
         anime({
             targets: this.animationElement,
             x: 130,
-            y: 300,
+            y: 240,
             duration: 300,
             delay,
             easing,
