@@ -1,7 +1,7 @@
 import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import anime from 'animejs';
-import { Container, Graphics } from 'pixi.js';
+import { Container, Graphics, Point } from 'pixi.js';
 import { Images } from '../assets';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { ForegroundEvents, TakeMe } from '../events/MainEvents';
@@ -41,6 +41,10 @@ export class ForegroundView extends PixiGrid {
 
     public getGridConfig(): ICellConfig {
         return getForegroundGridConfig();
+    }
+
+    public getHintPositions(): Point[] {
+        return this.match3Board.getHintPositions();
     }
 
     public rebuild(config?: ICellConfig | undefined): void {

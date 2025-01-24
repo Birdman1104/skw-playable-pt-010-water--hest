@@ -177,7 +177,6 @@ export class BoardView extends Container {
     }
 
     private onBoardStateUpdate(state: BoardState): void {
-        console.warn(BoardState[state]);
         this.state = state;
         switch (state) {
             case BoardState.PirateFalls:

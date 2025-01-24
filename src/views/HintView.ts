@@ -37,6 +37,8 @@ export class HintView extends Container {
 
     private onBoardStateUpdate(state: BoardState): void {
         this.boardState = state;
+        this.removeTweens();
+        this.hide();
     }
 
     private onHintVisibleUpdate(visible: boolean): void {
@@ -74,24 +76,41 @@ export class HintView extends Container {
     }
 
     private pointHand(): void {
-        anime({
-            targets: this.hand.scale,
-            x: 0.4,
-            y: 0.4,
-            duration: 500,
-            easing: 'easeInOutCubic',
-            direction: 'alternate',
-            begin: () => {
-                lego.event.emit('HintScaleDown', this.currentPoint);
-            },
-            complete: () => {
-                this.currentPoint += 1;
-                if (this.currentPoint >= this.hintPositions.length) {
-                    this.currentPoint = 0;
-                }
-                this.moveHand(this.hintPositions[this.currentPoint]);
-            },
-        });
+        if (this.boardState === BoardState.Idle) {
+            anime({
+                targets: this.hand.scale,
+                x: 0.4,
+                y: 0.4,
+                duration: 500,
+                easing: 'easeInOutCubic',
+                direction: 'alternate',
+                begin: () => {
+                    lego.event.emit('HintScaleDown', this.currentPoint);
+                },
+                complete: () => {
+                    this.currentPoint += 1;
+                    if (this.currentPoint >= this.hintPositions.length) {
+                        this.currentPoint = 0;
+                    }
+                    this.moveHand(this.hintPositions[this.currentPoint]);
+                },
+            });
+        } else if (this.boardState === BoardState.ShowMatch3) {
+            anime({
+                targets: this.hand.scale,
+                x: 0.4,
+                y: 0.4,
+                duration: 250,
+                easing: 'easeInOutCubic',
+                complete: () => {
+                    this.currentPoint += 1;
+                    if (this.currentPoint >= this.hintPositions.length) {
+                        this.currentPoint = 0;
+                    }
+                    this.moveHand(this.hintPositions[this.currentPoint]);
+                },
+            });
+        }
     }
 
     private moveHand(pos): void {
@@ -115,7 +134,8 @@ export class HintView extends Container {
             const board = getViewByProperty('viewName', 'BoardView');
             return board.getHintPositions().map((pos) => this.toLocal(pos));
         } else {
-            return [new Point(100, 100)];
+            const fg = getViewByProperty('viewName', 'ForegroundView');
+            return fg.getHintPositions().map((pos) => this.toLocal(pos));
         }
     }
 }

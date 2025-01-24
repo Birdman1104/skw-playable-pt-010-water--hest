@@ -1,5 +1,6 @@
+import { lego } from '@armathai/lego';
 import anime from 'animejs';
-import { Container, Sprite } from 'pixi.js';
+import { Container, Point, Sprite } from 'pixi.js';
 import { Images } from '../assets';
 import { callIfExists, delayRunnable, makeSprite } from '../utils';
 import { MatchSprite } from './MatchSprite';
@@ -27,6 +28,18 @@ export class MatchThreeBoard extends Container {
         super();
 
         this.build();
+    }
+
+    public getHintPositions(): Point[] {
+        if (this.config.size === 'small') {
+            const point1 = this.toGlobal(new Point(this.board[0][1]!.x, this.board[0][1]!.y));
+            const point2 = this.toGlobal(new Point(this.board[1][1]!.x, this.board[1][1]!.y));
+            return [point1, point2];
+        } else {
+            const point1 = this.toGlobal(new Point(this.board[2][2]!.x, this.board[2][2]!.y));
+            const point2 = this.toGlobal(new Point(this.board[2][3]!.x, this.board[2][3]!.y));
+            return [point1, point2];
+        }
     }
 
     public hide(): void {
@@ -70,6 +83,7 @@ export class MatchThreeBoard extends Container {
     }
 
     private onDragStart(event, sprite) {
+        lego.event.emit('ItemClick');
         if (this.draggedElement) return;
 
         this.data = event.data;

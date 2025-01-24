@@ -5,7 +5,7 @@ import { GameState } from '../models/GameModel';
 import Head from '../models/HeadModel';
 import { HintState } from '../models/HintModel';
 import { unMapCommands } from './EventCommandPairs';
-import { ctaModelGuard, gameModelGuard, hintModelGuard, hintParamGuard, isOverGuard, soundParamGuard } from './Guards';
+import { ctaModelGuard, gameModelGuard, hintModelGuard, hintParamGuard, soundParamGuard } from './Guards';
 
 export const initAdModelCommand = (): void => Head.initializeADModel();
 
@@ -156,12 +156,12 @@ export const takeToStoreCommand = (): void => {
 export const restartHintCommand = (): void => {
     lego.command
         //
-        .guard(hintModelGuard, lego.not(isOverGuard))
+        .guard(hintModelGuard)
         .execute(hideHintCommand)
 
-        .guard(hintModelGuard, lego.not(isOverGuard))
+        .guard(hintModelGuard)
         .execute(stopHintVisibilityTimerCommand)
 
-        .guard(hintModelGuard, lego.not(isOverGuard))
+        .guard(hintModelGuard)
         .execute(startHintVisibilityTimerCommand);
 };

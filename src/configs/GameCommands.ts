@@ -13,6 +13,9 @@ export const onBoardStateUpdateCommand = (state: BoardState) => {
             Head.gameModel?.board?.initBubbles();
             lego.command.execute(restartHintCommand);
             break;
+        case BoardState.ShowMatch3:
+            lego.command.execute(restartHintCommand);
+            break;
 
         default:
             break;

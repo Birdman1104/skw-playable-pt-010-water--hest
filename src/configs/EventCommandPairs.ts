@@ -1,7 +1,8 @@
 import { lego } from '@armathai/lego';
-import { BoardEvents, MainGameEvents, SoundEvents, TakeMe } from '../events/MainEvents';
+import { BoardEvents, ForegroundEvents, MainGameEvents, SoundEvents, TakeMe } from '../events/MainEvents';
 import { AdModelEvents, BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
 import {
+    hideHintCommand,
     onAdStatusUpdateCommand,
     onGameStateUpdateCommand,
     onMainViewReadyCommand,
@@ -68,5 +69,13 @@ const eventCommandPairs = Object.freeze([
     {
         event: BoardEvents.AnimationComplete,
         command: onMatch3CompleteCommand,
+    },
+    {
+        event: ForegroundEvents.Match3Complete,
+        command: hideHintCommand,
+    },
+    {
+        event: 'ItemClick',
+        command: hideHintCommand,
     },
 ]);
