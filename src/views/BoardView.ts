@@ -12,7 +12,7 @@ import { Chest } from './Chest';
 import { Pirate } from './pirate/Pirate';
 
 const BOUNDS = {
-    L: { x: -750, y: -100, w: 1500, h: 850 },
+    L: { x: -425, y: -450, w: 850, h: 900 },
     P: { x: -425, y: -800, w: 850, h: 1600 },
 };
 
@@ -100,8 +100,8 @@ export class BoardView extends Container {
 
     private buildBubbles(): void {
         const pos = [
-            { x: -120, y: -370 },
-            { x: 150, y: -200 },
+            { x: -120, y: -320 },
+            { x: 150, y: -150 },
         ];
 
         [this.bubble1, this.bubble2].forEach((b, i) => {});
@@ -110,7 +110,6 @@ export class BoardView extends Container {
         this.bubble1.position.set(pos[0].x, pos[0].y);
         this.bubble1.on('click', (type) => {
             lego.event.emit(BoardEvents.BubbleClick, type);
-            this.bubble1.hide();
         });
         this.addChild(this.bubble1);
 
@@ -118,7 +117,6 @@ export class BoardView extends Container {
         this.bubble2.position.set(pos[1].x, pos[1].y);
         this.bubble2.on('click', (type) => {
             lego.event.emit(BoardEvents.BubbleClick, type);
-            this.bubble2.hide();
         });
         this.addChild(this.bubble2);
     }

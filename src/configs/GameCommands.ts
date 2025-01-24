@@ -1,7 +1,7 @@
 import { lego } from '@armathai/lego';
 import { BoardState } from '../models/BoardModel';
 import Head from '../models/HeadModel';
-import { setBoardStateCommand } from './Commands';
+import { setBoardStateCommand, takeToStoreCommand } from './Commands';
 
 export const onPirateFallCompleteCommand = () => {
     lego.command.payload(BoardState.Idle).execute(setBoardStateCommand);
@@ -19,6 +19,10 @@ export const onBoardStateUpdateCommand = (state: BoardState) => {
 };
 
 export const onBubbleClickCommand = (type: string) => {
+    if (Head.gameModel?.board?.completed) {
+        lego.command.execute(takeToStoreCommand);
+        return;
+    }
     Head.gameModel?.board?.bubbleClick(type);
 };
 
