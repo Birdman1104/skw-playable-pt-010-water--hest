@@ -225,7 +225,6 @@ export class BoardView extends Container {
                 duration: 500,
                 easing,
                 complete: () => {
-                    // bomb.destroy();
                     this.chest.dropAlgae();
                     lego.event.emit(BoardEvents.AnimationComplete);
                 },
@@ -248,13 +247,15 @@ export class BoardView extends Container {
             });
             this.animateSword();
         } else if (this.chosenBubble === 'key') {
+            console.warn('key', this.chosenBubble);
+
             this.animationElement.texture = Texture.from(Images[`game/${this.chosenBubble}`]);
             const { anchor, position, scale, angle } = config[this.chosenBubble];
             this.animationElement.anchor.set(anchor.x, anchor.y);
             this.animationElement.position.set(position.x, position.y);
             this.animationElement.scale.set(scale.x, scale.y);
             this.animationElement.angle = angle;
-            // this.animationElement.alpha = 0;
+            this.animationElement.alpha = 1;
             this.animateKey();
         }
     }

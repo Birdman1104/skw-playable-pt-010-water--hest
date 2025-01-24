@@ -99,6 +99,8 @@ export class ForegroundView extends PixiGrid {
     }
 
     private onMatch3Update(match3: Match3Model): void {
+        console.warn('onMatch3Update', match3);
+
         if (!match3) {
             this.match3Wrapper.removeChild(this.match3Board);
             this.match3Board?.destroy();

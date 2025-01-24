@@ -25,7 +25,9 @@ export class BoardModel extends ObservableModel {
 
     private _match3: Match3Model | null;
 
-    private _chosenBubble: BubbleType = BubbleType.Ship;
+    private _chosenBubble: BubbleType;
+
+    private _completed: boolean = false;
 
     constructor() {
         super('BoardModel');
@@ -73,6 +75,14 @@ export class BoardModel extends ObservableModel {
         this._chosenBubble = value;
     }
 
+    public get completed(): boolean {
+        return this._completed;
+    }
+
+    public set completed(value: boolean) {
+        this._completed = value;
+    }
+
     public setState(value: BoardState): void {
         this._state = value;
     }
@@ -82,8 +92,30 @@ export class BoardModel extends ObservableModel {
     }
 
     public initBubbles(): void {
-        this.bubble1 = new BubbleModel(BUBBLES_ORDER[0]);
-        this.bubble2 = new BubbleModel(BUBBLES_ORDER[1]);
+        if (!this.chosenBubble) {
+            this.bubble1 = new BubbleModel(BubbleType.Sword);
+            this.bubble2 = new BubbleModel(BubbleType.Bomb);
+            return;
+        }
+
+        if (this.chosenBubble === BubbleType.Sword) {
+            this.bubble1 = new BubbleModel(BubbleType.Key);
+            this.bubble2 = new BubbleModel(BubbleType.Bomb);
+            return;
+        }
+        if (this.chosenBubble === BubbleType.Bomb) {
+            this.bubble1 = new BubbleModel(BubbleType.Sword);
+            this.bubble2 = new BubbleModel(BubbleType.Key);
+            return;
+        }
+        if (this.chosenBubble === BubbleType.Key) {
+            this.bubble1 = new BubbleModel(BubbleType.Sword);
+            this.bubble2 = new BubbleModel(BubbleType.Ship);
+            this.completed = true;
+            return;
+        }
+
+        console.warn('initBubbles', this.chosenBubble);
     }
 
     public bubbleClick(type: string): void {
