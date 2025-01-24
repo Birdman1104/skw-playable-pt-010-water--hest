@@ -6,6 +6,7 @@ import { BoardEvents, ForegroundEvents } from '../events/MainEvents';
 import { BoardModelEvents } from '../events/ModelEvents';
 import { BoardState } from '../models/BoardModel';
 import { delayRunnable, lp, makeSprite } from '../utils';
+import { Bomb } from './Bomb';
 import { Bubble } from './Bubble';
 import { Chest } from './Chest';
 import { Pirate } from './pirate/Pirate';
@@ -21,6 +22,7 @@ const PIRATE = {
     scale: 0.7,
 };
 
+const easing = 'easeInOutSine';
 export class BoardView extends Container {
     private bkg: Sprite;
     private pirate: Pirate;
@@ -204,28 +206,51 @@ export class BoardView extends Container {
     }
 
     private onMatch3Complete(): void {
-        this.animationElement.texture = Texture.from(Images[`game/${this.chosenBubble}`]);
+        if (this.chosenBubble === 'bomb') {
+            const bomb = new Bomb();
+            bomb.play();
+            this.addChild(bomb);
 
-        const { anchor, position, scale, angle } = config[this.chosenBubble];
-        this.animationElement.anchor.set(anchor.x, anchor.y);
-        this.animationElement.position.set(position.x, position.y);
-        this.animationElement.scale.set(scale.x, scale.y);
-        this.animationElement.angle = angle;
-        this.animationElement.alpha = 0;
+            anime({
+                targets: bomb.scale,
+                x: 0.5,
+                y: 0.5,
+                duration: 500,
+                easing,
+            });
+            anime({
+                targets: bomb,
+                x: 165,
+                y: 225,
+                duration: 500,
+                easing,
+                complete: () => {
+                    // bomb.destroy();
+                    this.chest.dropAlgae();
+                    lego.event.emit(BoardEvents.AnimationComplete);
+                },
+            });
+        } else if (this.chosenBubble === 'sword') {
+            this.animationElement.texture = Texture.from(Images[`game/${this.chosenBubble}`]);
 
-        anime({
-            targets: this.animationElement,
-            alpha: 1,
-            easing: 'easeInOutSine',
-            duration: 300,
-        });
-        if (this.chosenBubble === 'sword') {
+            const { anchor, position, scale, angle } = config[this.chosenBubble];
+            this.animationElement.anchor.set(anchor.x, anchor.y);
+            this.animationElement.position.set(position.x, position.y);
+            this.animationElement.scale.set(scale.x, scale.y);
+            this.animationElement.angle = angle;
+            this.animationElement.alpha = 0;
+
+            anime({
+                targets: this.animationElement,
+                alpha: 1,
+                easing: 'easeInOutSine',
+                duration: 300,
+            });
             this.animateSword();
         }
     }
 
     private animateSword(): void {
-        const easing = 'easeInOutSine';
         anime({
             targets: this.animationElement.scale,
             x: -0.7,
@@ -279,6 +304,12 @@ const config = {
         anchor: { x: 0.9, y: 0.9 },
         position: { x: -150, y: 192 },
         scale: { x: -1, y: 1 },
+        angle: 0,
+    },
+    bomb: {
+        anchor: { x: 0.5, y: 0.5 },
+        position: { x: 0, y: 0 },
+        scale: { x: 1, y: 1 },
         angle: 0,
     },
 };

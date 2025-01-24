@@ -54,8 +54,6 @@ export class Chest extends Container {
 
         this.algae.forEach((algae, i) => {
             const angle = Math.random() * 50 - 25;
-            console.warn(angle);
-
             anime({
                 targets: algae,
                 angle,

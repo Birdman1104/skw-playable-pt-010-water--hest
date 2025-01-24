@@ -82,8 +82,6 @@ export class BoardModel extends ObservableModel {
     }
 
     public initBubbles(): void {
-        console.warn(BUBBLES_ORDER[0], BUBBLES_ORDER[1]);
-
         this.bubble1 = new BubbleModel(BUBBLES_ORDER[0]);
         this.bubble2 = new BubbleModel(BUBBLES_ORDER[1]);
     }
