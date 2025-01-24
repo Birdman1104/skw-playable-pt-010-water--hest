@@ -2,18 +2,22 @@ import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, Point, Sprite } from 'pixi.js';
 import { Images } from '../assets';
-import { HintModelEvents } from '../events/ModelEvents';
-import { makeSprite } from '../utils';
+import { BoardModelEvents, HintModelEvents } from '../events/ModelEvents';
+import { BoardState } from '../models/BoardModel';
+import { getViewByProperty, makeSprite } from '../utils';
 
 export class HintView extends Container {
     private hand: Sprite;
     private hintPositions: Point[] = [];
     private currentPoint = 0;
+    private boardState: BoardState;
 
     constructor() {
         super();
 
-        lego.event.on(HintModelEvents.VisibleUpdate, this.onHintVisibleUpdate, this);
+        lego.event
+            .on(HintModelEvents.VisibleUpdate, this.onHintVisibleUpdate, this)
+            .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this);
 
         this.build();
         this.hide();
@@ -26,8 +30,13 @@ export class HintView extends Container {
     public destroy(): void {
         this.removeTweens();
         lego.event.off(HintModelEvents.VisibleUpdate, this.onHintVisibleUpdate, this);
+        lego.event.off(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this);
 
         super.destroy();
+    }
+
+    private onBoardStateUpdate(state: BoardState): void {
+        this.boardState = state;
     }
 
     private onHintVisibleUpdate(visible: boolean): void {
@@ -35,7 +44,7 @@ export class HintView extends Container {
     }
 
     private build(): void {
-        this.hand = makeSprite({ texture: Images['game/hand'] });
+        this.hand = makeSprite({ texture: Images['bubbles/hand'] });
         this.hand.anchor.set(0);
         this.addChild(this.hand);
     }
@@ -55,7 +64,7 @@ export class HintView extends Container {
 
     private showFirstTime(): void {
         const point = this.hintPositions[this.currentPoint];
-        this.hand.scale.set(0.8);
+        this.hand.scale.set(0.5);
         this.hand.alpha = 1;
         this.hand.position.set(point.x, point.y);
         this.hand.angle = 0;
@@ -67,14 +76,19 @@ export class HintView extends Container {
     private pointHand(): void {
         anime({
             targets: this.hand.scale,
-            x: 0.6,
-            y: 0.6,
+            x: 0.4,
+            y: 0.4,
             duration: 500,
             easing: 'easeInOutCubic',
             direction: 'alternate',
+            begin: () => {
+                lego.event.emit('HintScaleDown', this.currentPoint);
+            },
             complete: () => {
                 this.currentPoint += 1;
-                this.currentPoint = this.hintPositions.length % this.currentPoint;
+                if (this.currentPoint >= this.hintPositions.length) {
+                    this.currentPoint = 0;
+                }
                 this.moveHand(this.hintPositions[this.currentPoint]);
             },
         });
@@ -97,6 +111,11 @@ export class HintView extends Container {
     }
 
     private getHintPosition(): Point[] {
-        return [new Point(0, 0)];
+        if (this.boardState === BoardState.Idle) {
+            const board = getViewByProperty('viewName', 'BoardView');
+            return board.getHintPositions().map((pos) => this.toLocal(pos));
+        } else {
+            return [new Point(100, 100)];
+        }
     }
 }

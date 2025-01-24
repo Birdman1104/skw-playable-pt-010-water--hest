@@ -1,6 +1,6 @@
 export const GAME_CONFIG = Object.freeze({
-    HintOnIdle: 15, // Seconds
-    Hint: false,
+    HintOnIdle: 2, // Seconds
+    Hint: true,
     Sound: true,
 
     IdleTime: -1, // Seconds. Если игрок бездействует столько секунд,игра идет в стор

@@ -38,3 +38,6 @@ export const isTutorialModeGuard = (): boolean => {
     return !!Head.gameModel?.isTutorial;
 };
 
+export const isOverGuard = (): boolean => {
+    return !!Head.gameModel?.board?.completed;
+};

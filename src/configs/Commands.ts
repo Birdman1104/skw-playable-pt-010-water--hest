@@ -5,7 +5,7 @@ import { GameState } from '../models/GameModel';
 import Head from '../models/HeadModel';
 import { HintState } from '../models/HintModel';
 import { unMapCommands } from './EventCommandPairs';
-import { ctaModelGuard, gameModelGuard, hintModelGuard, hintParamGuard, soundParamGuard } from './Guards';
+import { ctaModelGuard, gameModelGuard, hintModelGuard, hintParamGuard, isOverGuard, soundParamGuard } from './Guards';
 
 export const initAdModelCommand = (): void => Head.initializeADModel();
 
@@ -49,7 +49,7 @@ const initializeModelsCommand = (): void => {
         .execute(startHintVisibilityTimerCommand);
 };
 
-const hideHintCommand = (): void => {
+export const hideHintCommand = (): void => {
     lego.command.payload(false).execute(setHintVisibleCommand);
 };
 
@@ -151,4 +151,17 @@ export const takeToStoreCommand = (): void => {
     // } else {
     //     window.installCTA();
     // }
+};
+
+export const restartHintCommand = (): void => {
+    lego.command
+        //
+        .guard(hintModelGuard, lego.not(isOverGuard))
+        .execute(hideHintCommand)
+
+        .guard(hintModelGuard, lego.not(isOverGuard))
+        .execute(stopHintVisibilityTimerCommand)
+
+        .guard(hintModelGuard, lego.not(isOverGuard))
+        .execute(startHintVisibilityTimerCommand);
 };

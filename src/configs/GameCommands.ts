@@ -1,7 +1,7 @@
 import { lego } from '@armathai/lego';
 import { BoardState } from '../models/BoardModel';
 import Head from '../models/HeadModel';
-import { setBoardStateCommand, takeToStoreCommand } from './Commands';
+import { hideHintCommand, restartHintCommand, setBoardStateCommand, takeToStoreCommand } from './Commands';
 
 export const onPirateFallCompleteCommand = () => {
     lego.command.payload(BoardState.Idle).execute(setBoardStateCommand);
@@ -11,6 +11,7 @@ export const onBoardStateUpdateCommand = (state: BoardState) => {
     switch (state) {
         case BoardState.Idle:
             Head.gameModel?.board?.initBubbles();
+            lego.command.execute(restartHintCommand);
             break;
 
         default:
@@ -23,6 +24,8 @@ export const onBubbleClickCommand = (type: string) => {
         lego.command.execute(takeToStoreCommand);
         return;
     }
+
+    lego.command.execute(hideHintCommand);
     Head.gameModel?.board?.bubbleClick(type);
 };
 

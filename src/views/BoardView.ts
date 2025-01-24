@@ -1,6 +1,6 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
-import { AnimatedSprite, Container, Rectangle, Sprite, Texture } from 'pixi.js';
+import { AnimatedSprite, Container, Point, Rectangle, Sprite, Texture } from 'pixi.js';
 import { Images } from '../assets';
 import { BoardEvents, ForegroundEvents } from '../events/MainEvents';
 import { BoardModelEvents } from '../events/ModelEvents';
@@ -22,6 +22,11 @@ const PIRATE = {
     scale: 0.7,
 };
 
+const BUBBLE_POS = [
+    { x: -120, y: -180 },
+    { x: 120, y: -80 },
+];
+
 const easing = 'easeInOutSine';
 export class BoardView extends Container {
     private bkg: Sprite;
@@ -34,6 +39,8 @@ export class BoardView extends Container {
     private chosenBubble: string;
     private animationElement: Sprite;
 
+    private state: BoardState;
+
     constructor() {
         super();
 
@@ -42,14 +49,22 @@ export class BoardView extends Container {
             .on(BoardModelEvents.ChosenBubbleUpdate, this.onChosenBubbleUpdate, this)
             .on(BoardModelEvents.Bubble1Update, this.onBubble1Update, this)
             .on(BoardModelEvents.Bubble2Update, this.onBubble2Update, this)
-            .on(ForegroundEvents.Match3Complete, this.onMatch3Complete, this);
-        // .on(BubbleModelEvents.IsShowingUpdate, this.onBubbleShowingUpdate, this);
+            .on(ForegroundEvents.Match3Complete, this.onMatch3Complete, this)
+            .on('HintScaleDown', this.onHintScaleDown, this);
 
         this.build();
     }
 
     get viewName() {
         return 'BoardView';
+    }
+
+    public get boardState(): BoardState {
+        return this.state;
+    }
+
+    public getHintPositions(): Point[] {
+        return BUBBLE_POS.map((pos) => this.toGlobal(new Point(pos.x, pos.y)));
     }
 
     public getBounds(): Rectangle {
@@ -59,6 +74,19 @@ export class BoardView extends Container {
 
     public rebuild(): void {
         //
+    }
+
+    private onHintScaleDown(index) {
+        const targets = index === 1 ? this.bubble2 : this.bubble1;
+
+        anime({
+            targets: targets.scale,
+            x: '+=0.2',
+            y: '+=0.2',
+            duration: 500,
+            easing: 'easeInOutCubic',
+            direction: 'alternate',
+        });
     }
 
     private build(): void {
@@ -99,15 +127,10 @@ export class BoardView extends Container {
     }
 
     private buildBubbles(): void {
-        const pos = [
-            { x: -120, y: -180 },
-            { x: 120, y: -80 },
-        ];
-
         [this.bubble1, this.bubble2].forEach((b, i) => {});
 
         this.bubble1 = new Bubble();
-        this.bubble1.position.set(pos[0].x, pos[0].y);
+        this.bubble1.position.set(BUBBLE_POS[0].x, BUBBLE_POS[0].y);
         this.bubble1.on('click', (type) => {
             this.bubble2.disable();
             lego.event.emit(BoardEvents.BubbleClick, type);
@@ -115,7 +138,7 @@ export class BoardView extends Container {
         this.addChild(this.bubble1);
 
         this.bubble2 = new Bubble();
-        this.bubble2.position.set(pos[1].x, pos[1].y);
+        this.bubble2.position.set(BUBBLE_POS[1].x, BUBBLE_POS[1].y);
         this.bubble2.on('click', (type) => {
             this.bubble1.disable();
 
@@ -154,6 +177,8 @@ export class BoardView extends Container {
     }
 
     private onBoardStateUpdate(state: BoardState): void {
+        console.warn(BoardState[state]);
+        this.state = state;
         switch (state) {
             case BoardState.PirateFalls:
                 this.onPirateFalls();
@@ -203,6 +228,10 @@ export class BoardView extends Container {
 
     private onChosenBubbleUpdate(type: string): void {
         this.chosenBubble = type;
+        anime.remove(this.bubble1.scale);
+        anime.remove(this.bubble2.scale);
+        this.bubble1.scale.set(1);
+        this.bubble2.scale.set(1);
     }
 
     private onMatch3Complete(): void {

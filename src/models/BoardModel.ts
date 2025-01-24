@@ -114,8 +114,6 @@ export class BoardModel extends ObservableModel {
             this.completed = true;
             return;
         }
-
-        console.warn('initBubbles', this.chosenBubble);
     }
 
     public bubbleClick(type: string): void {
@@ -130,6 +128,7 @@ export class BoardModel extends ObservableModel {
     }
 
     public match3Complete(): void {
+        this.state = BoardState.Idle;
         this._match3 = null;
         this.initBubbles();
     }
