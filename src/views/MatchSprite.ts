@@ -32,6 +32,10 @@ export class MatchSprite extends Container {
         this.sprite.scale.set(1);
     }
 
+    public resetScale(): void {
+        this.sprite.scale.set(1);
+    }
+
     public disable(): void {
         this.sprite.interactive = false;
     }

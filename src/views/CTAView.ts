@@ -25,7 +25,7 @@ export class CTAView extends PixiGrid {
 
     private build(): void {
         this.blocker = new Graphics();
-        this.blocker.beginFill(0x919191, 1);
+        this.blocker.beginFill(0x000000, 1);
         this.blocker.drawRect(0, 0, 10, 10);
         this.blocker.endFill();
         this.blocker.alpha = 0;
@@ -34,6 +34,7 @@ export class CTAView extends PixiGrid {
 
     private visibleUpdate(visible: boolean): void {
         this.blocker.interactive = true;
+        this.blocker.alpha = visible ? 0.4 : 0;
         this.blocker.on('pointerdown', () => {
             lego.event.emit(TakeMe.ToStore);
         });

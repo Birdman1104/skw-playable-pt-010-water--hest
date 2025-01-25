@@ -13,6 +13,14 @@ export class Pirate extends Container {
         this.build();
     }
 
+    public surprised(): void {
+        this.head.scared();
+    }
+
+    public happy(): void {
+        this.head.pleased();
+    }
+
     public fall(): void {
         this.head.scared();
         this.head.openEyes();
@@ -22,7 +30,7 @@ export class Pirate extends Container {
     public idle(): void {
         this.body.idle();
         this.head.idle();
-        this.head.openMouth();
+        this.head.sad();
     }
 
     public float(): void {

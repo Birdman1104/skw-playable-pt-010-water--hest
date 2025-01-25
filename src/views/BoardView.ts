@@ -40,6 +40,7 @@ export class BoardView extends Container {
     private animationElement: Sprite;
 
     private state: BoardState;
+    private isComplete = false;
 
     constructor() {
         super();
@@ -49,6 +50,7 @@ export class BoardView extends Container {
             .on(BoardModelEvents.ChosenBubbleUpdate, this.onChosenBubbleUpdate, this)
             .on(BoardModelEvents.Bubble1Update, this.onBubble1Update, this)
             .on(BoardModelEvents.Bubble2Update, this.onBubble2Update, this)
+            .on(BoardModelEvents.CompletedUpdate, this.onCompletedUpdate, this)
             .on(ForegroundEvents.Match3Complete, this.onMatch3Complete, this)
             .on('HintScaleDown', this.onHintScaleDown, this);
 
@@ -182,6 +184,9 @@ export class BoardView extends Container {
             case BoardState.PirateFalls:
                 this.onPirateFalls();
                 break;
+            case BoardState.Idle:
+                this.isComplete ? this.pirate.happy() : this.pirate.idle();
+                break;
 
             default:
                 break;
@@ -233,10 +238,20 @@ export class BoardView extends Container {
         this.bubble2.scale.set(1);
     }
 
+    private onCompletedUpdate(completed: boolean): void {
+        this.isComplete = completed;
+    }
+
     private onMatch3Complete(): void {
         if (this.chosenBubble === 'bomb') {
+            this.pirate.surprised();
+            const delay = 200;
+            const cb = () => {
+                this.chest.dropAlgae();
+                lego.event.emit(BoardEvents.AnimationComplete);
+            };
             const bomb = new Bomb();
-            bomb.play();
+            bomb.play(cb);
             this.addChild(bomb);
 
             anime({
@@ -244,20 +259,19 @@ export class BoardView extends Container {
                 x: 0.5,
                 y: 0.5,
                 duration: 500,
+                delay,
                 easing,
             });
             anime({
                 targets: bomb,
                 x: 165,
                 y: 255,
-                duration: 500,
+                duration: 700,
                 easing,
-                complete: () => {
-                    this.chest.dropAlgae();
-                    lego.event.emit(BoardEvents.AnimationComplete);
-                },
+                delay,
             });
         } else if (this.chosenBubble === 'sword') {
+            this.pirate.surprised();
             this.animationElement.texture = Texture.from(Images[`game/${this.chosenBubble}`]);
 
             const { anchor, position, scale, angle } = config[this.chosenBubble];
@@ -335,6 +349,7 @@ export class BoardView extends Container {
     }
 
     private animateKey(): void {
+        this.pirate.happy();
         const delay = 150;
         anime({
             targets: this.animationElement.scale,

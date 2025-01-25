@@ -36,6 +36,16 @@ export class PirateHead extends Container {
             easing: 'linear',
             loop: true,
         });
+        anime({
+            targets: this.pupil,
+            x: [3, 1],
+            y: [-4, -6],
+            duration: 600,
+            delay: 500,
+            direction: 'alternate',
+            easing: 'linear',
+            loop: true,
+        });
     }
 
     public openEyes(): void {
@@ -108,11 +118,18 @@ export class PirateHead extends Container {
                         targets: m,
                         alpha: 1,
                         duration: 300,
-                        easing: 'linear',
+                        easing: 'easeInSine',
                     });
                 } else {
-                    m.visible = false;
-                    m.alpha = 0;
+                    anime({
+                        targets: m,
+                        alpha: 0,
+                        duration: 300,
+                        easing: 'easeOutSine',
+                        complete: () => {
+                            m.visible = false;
+                        },
+                    });
                 }
             });
         } else {

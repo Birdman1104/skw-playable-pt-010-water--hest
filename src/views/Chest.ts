@@ -90,6 +90,7 @@ export class Chest extends Container {
             scale: { x: 0.55, y: 0.55 },
             position: { x: 0, y: 10 },
         });
+        this.chestOpen.alpha = 0;
         this.addChild(this.chestOpen);
     }
 

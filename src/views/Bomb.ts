@@ -1,7 +1,7 @@
 import anime from 'animejs';
 import { AnimatedSprite, Container, Sprite } from 'pixi.js';
 import { Images } from '../assets';
-import { makeSprite } from '../utils';
+import { callIfExists, makeSprite } from '../utils';
 
 export class Bomb extends Container {
     private bomb: Sprite;
@@ -14,23 +14,24 @@ export class Bomb extends Container {
         this.build();
     }
 
-    public play(): void {
-        this.playSpark();
+    public play(cb): void {
+        this.playSpark(cb);
     }
 
-    private playSpark(): void {
+    private playSpark(cb): void {
         anime({
             targets: this.spark,
             x: -180,
             y: 0,
-            duration: 300,
+            delay: 200,
+            duration: 400,
             easing: 'linear',
             complete: () => {
                 anime({
                     targets: this.spark,
                     x: -100,
                     y: 15,
-                    duration: 200,
+                    duration: 300,
                     easing: 'linear',
                     complete: () => {
                         this.explosion.visible = true;
@@ -39,13 +40,16 @@ export class Bomb extends Container {
                             targets: this.bomb.scale,
                             x: '+=0.2',
                             y: '+=0.2',
-                            duration: 200,
+                            duration: 300,
                             easing: 'linear',
                         });
                         anime({
                             targets: this.bomb,
                             alpha: 0,
-                            duration: 200,
+                            duration: 300,
+                            complete: () => {
+                                callIfExists(cb);
+                            },
                             easing: 'linear',
                         });
                         anime({

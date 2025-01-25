@@ -104,6 +104,7 @@ export class MatchThreeBoard extends Container {
 
     private onDragEnd() {
         if (this.draggedElement) {
+            this.draggedElement.resetScale();
             this.board.forEach((col) => col.forEach((e) => e?.disable()));
             const dragEndPosition = this.data.getLocalPosition(this);
 
