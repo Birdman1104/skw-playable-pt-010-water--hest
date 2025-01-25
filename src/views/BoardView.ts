@@ -125,6 +125,8 @@ export class BoardView extends Container {
             anchor: { x: 0.5, y: 0.5 },
             position: { x: 0, y: 430 },
         });
+        water.alpha = 0.85;
+
         this.addChild(water);
     }
 
