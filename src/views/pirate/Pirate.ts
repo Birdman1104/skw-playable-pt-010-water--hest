@@ -54,7 +54,7 @@ export class Pirate extends Container {
 
     private build(): void {
         this.head = new PirateHead();
-        this.head.openMouth();
+        this.head.sad();
 
         this.body = new PirateBody();
 

@@ -10,7 +10,6 @@ export class PirateHead extends Container {
     private topEyelids: Sprite;
 
     private mouthClosed: Sprite;
-    private mouthOpen: Sprite;
     private mouthPleased: Sprite;
     private mouthSad: Sprite;
     private mouthScared: Sprite;
@@ -68,10 +67,6 @@ export class PirateHead extends Container {
         this.showMouth(this.mouthClosed, true);
     }
 
-    public openMouth(): void {
-        this.showMouth(this.mouthOpen, true);
-    }
-
     private build(): void {
         this.head = makeSprite({ texture: Images['pirate/head'] });
         this.addChild(this.head);
@@ -87,9 +82,6 @@ export class PirateHead extends Container {
 
         this.mouthClosed = makeSprite({ texture: Images['pirate/mouth_closed'] });
         this.addChild(this.mouthClosed);
-
-        this.mouthOpen = makeSprite({ texture: Images['pirate/mouth_open'] });
-        this.addChild(this.mouthOpen);
 
         this.mouthPleased = makeSprite({ texture: Images['pirate/mouth_pleased'] });
         this.addChild(this.mouthPleased);
@@ -133,6 +125,6 @@ export class PirateHead extends Container {
     }
 
     private getMouths(): Sprite[] {
-        return [this.mouthScared, this.mouthClosed, this.mouthOpen, this.mouthPleased, this.mouthSad];
+        return [this.mouthScared, this.mouthClosed, this.mouthPleased, this.mouthSad];
     }
 }

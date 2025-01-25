@@ -1,9 +1,8 @@
 import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
-import { GameModelEvents, HintModelEvents } from '../events/ModelEvents';
+import { GameModelEvents } from '../events/ModelEvents';
 import { BoardModel } from '../models/BoardModel';
-import { HintState } from '../models/HintModel';
 import { BoardView } from './BoardView';
 
 export class GameView extends PixiGrid {
@@ -12,9 +11,7 @@ export class GameView extends PixiGrid {
     constructor() {
         super();
 
-        lego.event
-            .on(GameModelEvents.BoardUpdate, this.onBoardUpdate, this)
-            .on(HintModelEvents.StateUpdate, this.onHintStateUpdate, this);
+        lego.event.on(GameModelEvents.BoardUpdate, this.onBoardUpdate, this);
         this.build();
     }
 
@@ -31,10 +28,6 @@ export class GameView extends PixiGrid {
     }
 
     private build(): void {
-        //
-    }
-
-    private onHintStateUpdate(state: HintState): void {
         //
     }
 
