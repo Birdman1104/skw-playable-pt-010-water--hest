@@ -1,3 +1,4 @@
+import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { AnimatedSprite, Container, Sprite } from 'pixi.js';
 import { Images } from '../assets';
@@ -19,12 +20,12 @@ export class Bomb extends Container {
     }
 
     private playSpark(cb): void {
+        lego.event.emit('playFitil');
         anime({
             targets: this.spark,
             x: -180,
             y: 0,
-            delay: 200,
-            duration: 400,
+            duration: 600,
             easing: 'linear',
             complete: () => {
                 anime({
@@ -36,6 +37,7 @@ export class Bomb extends Container {
                     complete: () => {
                         this.explosion.visible = true;
                         this.explosion.play();
+                        lego.event.emit('playExplosion');
                         anime({
                             targets: this.bomb.scale,
                             x: '+=0.2',

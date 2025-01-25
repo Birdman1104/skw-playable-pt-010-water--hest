@@ -1,3 +1,4 @@
+import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { AnimatedSprite, Container, Sprite } from 'pixi.js';
 import { Images } from '../assets';
@@ -92,6 +93,7 @@ export class MatchSprite extends Container {
         this.sprite.interactive = true;
         this.sprite.on('pointerdown', (e) => {
             this.sprite.scale.set(0.85);
+            lego.event.emit('MatchItemClick');
             this.emit('down', e);
         });
 

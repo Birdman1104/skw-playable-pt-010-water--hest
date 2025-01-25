@@ -69,12 +69,25 @@ export class MatchThreeBoard extends Container {
                 sprite.x = sx + i * tileSize;
                 sprite.y = sy + j * tileSize;
 
-                sprite.on('down', (e) => this.onDragStart(e, sprite));
-                sprite.on('end', () => this.onDragEnd());
-                sprite.on('move', () => this.onDragMove());
                 sprite.originalPosition = { x: sprite.x, y: sprite.y };
 
                 sprite.boardPosition = { row: j, col: i };
+
+                sprite.scale.set(0);
+                anime({
+                    targets: sprite.scale,
+                    x: 1,
+                    y: 1,
+                    duration: 200,
+                    delay: (i * 2 + j + 1) * 50,
+                    easing: 'easeOutBack',
+                    complete: () => {
+                        sprite.on('down', (e) => this.onDragStart(e, sprite));
+                        sprite.on('end', () => this.onDragEnd());
+                        sprite.on('move', () => this.onDragMove());
+                    },
+                });
+
                 this.addChild(sprite);
 
                 this.board[i][j] = sprite;
@@ -118,6 +131,8 @@ export class MatchThreeBoard extends Container {
                 this.resetElementPosition(this.draggedElement);
                 this.draggedElement = null;
                 this.dragStartPosition = null;
+                this.board.forEach((col) => col.forEach((e) => e?.enable()));
+
                 return;
             }
 
@@ -257,7 +272,8 @@ export class MatchThreeBoard extends Container {
 
                     const callback = () => {
                         if (this.board.every((col) => col.every((el) => el === null))) {
-                            delayRunnable(0.3, () => {
+                            lego.event.emit('playBoardComplete');
+                            delayRunnable(0.4, () => {
                                 this.emit('won');
                                 callIfExists(cb);
                             });

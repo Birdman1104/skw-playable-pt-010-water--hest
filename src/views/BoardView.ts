@@ -315,6 +315,7 @@ export class BoardView extends Container {
                     duration: 200,
                     easing,
                     complete: () => {
+                        let i = 0;
                         anime({
                             targets: this.animationElement,
                             angle: 70,
@@ -322,6 +323,12 @@ export class BoardView extends Container {
                             easing,
                             loop: 5,
                             direction: 'alternate',
+                            loopBegin: () => {
+                                if (i % 2 === 0) {
+                                    lego.event.emit('swordSound');
+                                }
+                                i++;
+                            },
                             complete: () => {
                                 this.chest.dropAlgae();
                                 anime({
@@ -367,6 +374,7 @@ export class BoardView extends Container {
             delay,
             easing,
             complete: () => {
+                lego.event.emit('playLockOpen');
                 anime({
                     targets: this.animationElement.scale,
                     y: -0.3,
