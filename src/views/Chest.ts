@@ -1,3 +1,4 @@
+import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, Sprite } from 'pixi.js';
 import { Images } from '../assets';
@@ -41,6 +42,7 @@ export class Chest extends Container {
     }
 
     public open(): void {
+        lego.event.emit('playLaugh');
         anime({
             targets: this.chestClosed,
             alpha: 0,

@@ -250,6 +250,7 @@ export class BoardView extends Container {
             const delay = 200;
             const cb = () => {
                 this.chest.dropAlgae();
+                lego.event.emit('PlayCry');
                 lego.event.emit(BoardEvents.AnimationComplete);
             };
             const bomb = new Bomb();
@@ -339,6 +340,7 @@ export class BoardView extends Container {
                                     duration: 300,
                                     easing,
                                     complete: () => {
+                                        lego.event.emit('PlayCry');
                                         lego.event.emit(BoardEvents.AnimationComplete);
                                     },
                                 });

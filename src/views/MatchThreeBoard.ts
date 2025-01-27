@@ -272,7 +272,7 @@ export class MatchThreeBoard extends Container {
 
                     const callback = () => {
                         if (this.board.every((col) => col.every((el) => el === null))) {
-                            lego.event.emit('playBoardComplete');
+                            // lego.event.emit('playBoardComplete');
                             delayRunnable(0.4, () => {
                                 this.emit('won');
                                 callIfExists(cb);
@@ -280,8 +280,10 @@ export class MatchThreeBoard extends Container {
                         }
                     };
                     matches.forEach((element, i) => {
+                        if (i === 0) {
+                            lego.event.emit('PlayMerge');
+                        }
                         this.board[element.boardPosition.col][element.boardPosition.row] = null;
-
                         element.explode(i === matches.length - 1 ? callback : null);
                     });
 
